@@ -1,4 +1,6 @@
 <a
 class="link"
-href="https://app.box.com/s/xzogplv63t128ituj7krx45tizjnq3t6"
+href="/assets/Steve_Resume.pdf"
+target="_blank"
+rel="noopener noreferrer"
 >Resume link</a>
