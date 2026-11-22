@@ -39,9 +39,6 @@
 					</figcaption>
 				</figure>
 		{/if}
-		{#if section.source}
-			<p class="source"><a class="text-link" href={section.source.url}>{section.source.label}</a></p>
-		{/if}
 			{#if section.articles}
 				<ul class="articles" aria-label={job.company + ' Engineering articles'}>
 					{#each section.articles as article}
@@ -83,6 +80,6 @@
 		border-radius: 8px; background-color: light-dark(#f5f5f4, #242426);
 	}
 	.job-figure .portrait img { width: auto; max-width: 100%; height: auto; max-height: 24rem; }
-	.job-figure figcaption, .job .source { color: var(--muted); margin: 8px 0 0; font-size: 0.875rem; line-height: 1.5; }
+	.job-figure figcaption { color: var(--muted); margin: 8px 0 0; font-size: 0.875rem; line-height: 1.5; }
 	.job footer { margin-top: 32px; }
 </style>

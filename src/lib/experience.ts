@@ -8,7 +8,6 @@ export interface ExperienceItem {
 	sections: {
 		title?: string;
 		body: string | string[];
-		source?: { label: string; url: string };
 		figure?: { image: string; alt: string; width: number; height: number; caption: string };
 		articles?: { title: string; date: string; url: string }[];
 	}[];
@@ -105,17 +104,16 @@ export const experience: ExperienceItem[] = [
 		sections: [
 			{
 				body: 'Two high school friends started Orca while I was at UT Austin. I joined as the founding engineer and built the React Native app students used to pay each other and split bills. We were in Y Combinator’s Winter 2022 batch.',
-				source: { label: 'Orca’s Y Combinator profile', url: 'https://www.ycombinator.com/companies/orca' }
+				figure: {
+					image: '/assets/experience/orca-bill-splitting.png',
+					alt: 'Orca’s group expense screen lists shared trip costs and shows who has paid.',
+					width: 512,
+					height: 1008,
+					caption: 'Group bill splitting, pictured on Orca’s 2022 launch site.'
+				}
 			},
 			{
-				body: 'I also built our launch site and made the ads for campus promotions, including the Gong Cha offer below.',
-				figure: {
-					image: '/assets/experience/orca-campus-offer.webp',
-					alt: 'Orca’s phone mockup shows confetti above a Gong Cha offer for 50% cashback.',
-					width: 512,
-					height: 1040,
-					caption: 'A Gong Cha offer as it appeared on Orca’s 2022 landing page.'
-				}
+				body: 'I also built our launch site and made ads for campus promotions.'
 			}
 		]
 	},
