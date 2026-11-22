@@ -255,6 +255,8 @@ test('homepage additions follow the original bio and bubbles', async ({ page }) 
 	const main = page.getByRole('main');
 	const paragraphs = main.locator(':scope > p');
 	await expect(paragraphs).toHaveCount(5);
+	await expect(paragraphs.nth(0)).toHaveText("I'm currently building the Machine Learning Platform for the metaverse at Roblox.");
+	await expect(paragraphs.nth(1)).toContainText('Previously, I interned twice at Amazon, where I built serverless full-stack applications');
 	await expect(paragraphs.nth(2)).toHaveText(
 		"I love learning new technologies and understanding how things work from first principles. My passion is to use computing to build scalable automations, create delightful interactions, and enhance our well-being. To these ends, I've learned the following tools. The sizes are proportional to my proficiency. You can poke at them to learn more."
 	);
@@ -293,6 +295,39 @@ test('original bubbles stay centered across full-page capture and resize, and to
     await page.locator('.bubble-chart').scrollIntoViewIfNeeded();
     await expect.poll(async () => (await centers()).every(x => x >= 10 && x <= 380)).toBe(true);
     await page.screenshot({ path: 'qa/restored-bubbles-mobile.png', fullPage: true });
+});
+
+test('bubble labels fit the settled circle and switch without a stale caption', async ({ page }) => {
+	await page.addInitScript(() => localStorage.setItem('skipAnimation', 'TRUE'));
+	await page.emulateMedia({ reducedMotion: 'no-preference' });
+	await page.goto('/');
+	const chart = page.locator('.bubble-chart');
+	await chart.scrollIntoViewIfNeeded();
+	const ray = chart.getByRole('button', { name: 'Ray', exact: true });
+	const kubernetes = chart.getByRole('button', { name: 'Kubernetes', exact: true });
+	await expect(ray).toHaveCSS('opacity', '1');
+	await ray.press('Enter');
+	await kubernetes.press('Enter');
+	await kubernetes.press('Escape');
+	await ray.press('Space');
+	await expect(kubernetes.locator('.tech-text')).toHaveCSS('opacity', '0');
+	await expect(ray.locator('.tech-text')).toHaveCSS('opacity', '1');
+	await expect(ray.locator('.bubble-surface')).toHaveAttribute('r', '100');
+	const layout = await ray.evaluate(group => {
+		const face = group.querySelector('circle')!;
+		const label = group.querySelector<SVGGElement>('.tech-text')!;
+		const clip = label.parentElement!.getAttribute('clip-path')!;
+		const reference = document.getElementById(clip.slice(5, -1))?.querySelector('use');
+		const lines = Array.from(label.querySelectorAll<SVGGraphicsElement>('.name-text, tspan'));
+		const fits = lines.every(line => {
+			const { x, y, width, height } = line.getBBox();
+			return Math.hypot(Math.max(-x, x + width), Math.max(-y, y + height)) <= face.r.baseVal.value;
+		});
+		return { followsFace: reference?.getAttribute('href') === '#' + face.id, fits, lines: lines.length };
+	});
+	expect(layout.followsFace).toBe(true);
+	expect(layout.fits).toBe(true);
+	expect(layout.lines).toBeGreaterThan(2);
 });
 
 test('original entrance completes, replays and cancels safely for navigation and reduced motion', async ({ page }) => {

@@ -17,6 +17,7 @@ import { headerAnimationComplete } from '../stores';
     }
 
     let { technologies = [] }: Props = $props();
+const chartId = $props.id();
 
 // Scale factor for bubble sizes based on proficiency
 const BUBBLE_SIZE_SCALE = 10;
@@ -281,193 +282,112 @@ function initializeSimulation() {
                 d.fy = null;
             }));
 
-    function handleNodeClick(event: any, d: Node) {
-        // Ignore if we're in the middle of a drag
+    function handleNodeClick(event: Event, d: Node) {
         if (isDragging) return;
-        
-        event.stopPropagation(); // Prevent bubbling
-        
-        // Reset previous expanded node
-        if (expandedNode && expandedNode !== d) {
-            expandedNode.isExpanded = false;
-            expandedNode.r = expandedNode.originalRadius!;
-        }
+        event.stopPropagation();
 
-        // Toggle current node
+        const previous = expandedNode;
+        if (previous && previous !== d) {
+            previous.isExpanded = false;
+            previous.r = previous.originalRadius!;
+        }
         d.isExpanded = !d.isExpanded;
         d.r = d.isExpanded ? maxRadius : d.originalRadius!;
         expandedNode = d.isExpanded ? d : null;
 
-        node.attr('aria-pressed', item => String(Boolean(item.isExpanded)));
+        const changed = node.filter(item => item === previous || item === d);
+        changed.attr('aria-pressed', item => String(Boolean(item.isExpanded)));
+        const surfaces = changed.select<SVGCircleElement>('.bubble-surface').interrupt('radius');
 
-        // Update simulation
-        simulation.force('collide', d3.forceCollide<Node>(d => d.r + 2).strength(0.9));
-        simulation.alpha(0.5).restart();
-
-        // Update visuals with springy animation
-        node.selectAll<SVGCircleElement, Node>('circle')
-            .transition()
-            .duration(reducedMotion ? 0 : 800)
-            .ease(d3.easeElastic.period(0.5))
-            .attr('r', d => d.r);
-
-        // Toggle visibility of elements with fade
-        const icons = node.selectAll<SVGImageElement, Node>('.tech-icon');
-        const texts = node.selectAll<SVGGElement, Node>('.tech-text');
-
-        // Handle icon visibility
-        icons
-            .transition()
-            .duration(reducedMotion ? 0 : 300)
-            .style('opacity', d => d.isExpanded ? 0 : 1)
-            .on('end', function(d) {
-                d3.select(this).style('display', d.isExpanded ? 'none' : 'block');
-            });
-
-        // Handle text visibility
-        texts.each(function(this: SVGGElement, d: any) {
-            const data = d as Node;
-            const textGroup = d3.select(this);
-            if (data.isExpanded) {
-                textGroup
-                    .style('display', 'block')
-                    .style('opacity', 0)
-                    .transition()
-                    .duration(reducedMotion ? 0 : 300)
-                    .style('opacity', 1);
-            } else {
-                textGroup
-                    .transition()
-                    .duration(reducedMotion ? 0 : 300)
-                    .style('opacity', 0)
-                    .on('end', function() {
-                        textGroup.style('display', 'none');
-                    });
-            }
-        });
+        simulation.force('collide', d3.forceCollide<Node>(item => item.r + 2).strength(0.9));
+        if (reducedMotion) {
+            surfaces.attr('r', item => item.r);
+            simulation.alpha(0.5).stop().tick(160);
+            positionNodes();
+        } else {
+            surfaces.transition('radius').duration(210).ease(d3.easeCubicOut).attr('r', item => item.r);
+            simulation.alpha(0.5).restart();
+        }
     }
 
+    // The clip uses the painted circle itself, including its radius between animation frames.
+    svgElement.select('defs').selectAll('clipPath')
+        .data(nodes).join('clipPath')
+        .attr('id', d => `${chartId}-clip-${d.id}`)
+        .append('use')
+        .attr('href', d => `#${chartId}-surface-${d.id}`);
+
     node.append('circle')
+        .attr('class', 'bubble-surface')
+        .attr('id', d => `${chartId}-surface-${d.id}`)
         .attr('r', (d: Node) => d.r)
         .attr('fill', 'url(#technology-surface)')
         .attr('stroke', 'var(--bubble-edge)')
         .style('cursor', 'pointer');
 
-    // Add technology icon
-    node.append('svg:image')
+    const content = node.append('g')
+        .attr('clip-path', d => `url(#${chartId}-clip-${d.id})`)
+        .attr('aria-hidden', 'true')
+        .style('pointer-events', 'none');
+
+    content.append('image')
         .attr('class', 'tech-icon')
-        .attr('xlink:href', d => d.svg)
-        .attr('x', d => {
-            const padding = (d.padding ?? 0.3) * d.r; // Default padding is 30% of radius
-            return -d.r + padding;
-        })
-        .attr('y', d => {
-            const padding = (d.padding ?? 0.3) * d.r;
-            return -d.r + padding;
-        })
-        .attr('width', d => {
-            const padding = (d.padding ?? 0.3) * d.r * 2;
-            return d.r * 2 - padding;
-        })
-        .attr('height', d => {
-            const padding = (d.padding ?? 0.3) * d.r * 2;
-            return d.r * 2 - padding;
-        })
-        .style('pointer-events', 'none');
-
-    // Add text group (initially hidden)
-    const textGroup = node.append('g')
-        .attr('class', 'tech-text')
-        .style('display', 'none')
-        .style('pointer-events', 'none');
-
-    // Add name text
-    textGroup.append('text')
-        .attr('class', 'name-text')
-        .attr('dy', '-3em')
-        .attr('text-anchor', 'middle')
-        .style('fill', 'var(--bubble-ink)')
-        .style('font-size', '14px')
-        .style('font-weight', 'bold')
-        .text(d => d.name);
-
-    // Add description text with wrapping
-    textGroup.append('text')
-        .attr('class', 'desc-text')
-        .attr('text-anchor', 'middle')
-        .style('fill', 'var(--bubble-ink)')
-        .style('font-size', '12px')
+        .attr('href', d => d.svg)
         .each(function(d) {
-            const text = d3.select(this);
-            const words = d.description.split(' ');
-            const lineHeight = 1.1;
-            const maxWidth = maxRadius * 1.4;
-            let currentLine: string[] = [];
-            let lineNumber = 0;
-
-            // Clear any existing content
-            text.text('');
-            text.selectAll('tspan').remove();
-
-            // Function to test line width
-            function getLineWidth(line: string) {
-                const testTspan = text.append('tspan').text(line);
-                const width = (testTspan.node() as SVGTextElement).getComputedTextLength();
-                testTspan.remove();
-                return width;
-            }
-
-            // Calculate lines
-            const lines: string[] = [];
-            let tempLine: string[] = [];
-            words.forEach((word) => {
-                tempLine.push(word);
-                const currentText = tempLine.join(' ');
-                const lineWidth = getLineWidth(currentText);
-
-                if (lineWidth > maxWidth && tempLine.length > 1) {
-                    lines.push(tempLine.slice(0, -1).join(' '));
-                    tempLine = [word];
-                }
-            });
-            if (tempLine.length > 0) {
-                lines.push(tempLine.join(' '));
-            }
-
-            // Add lines starting from a fixed position near the top
-            lines.forEach((line, i) => {
-                text.append('tspan')
-                    .attr('x', 0)
-                    .attr('dy', i === 0 ? '-1em' : lineHeight + 'em')
-                    .text(line + ' ');
-            });
+            const halfSize = d.r * (1 - (d.padding ?? 0.3));
+            d3.select(this).attr('x', -halfSize).attr('y', -halfSize)
+                .attr('width', 2 * halfSize).attr('height', 2 * halfSize);
         });
+
+    const labels = content.append('g')
+        .attr('class', 'tech-text')
+        .attr('text-anchor', 'middle')
+        .attr('fill', 'var(--bubble-ink)');
+
+    labels.append('text').attr('class', 'name-text')
+        .attr('font-size', 14).attr('font-weight', 'bold').text(d => d.name);
+    labels.append('text').attr('class', 'desc-text').attr('font-size', 12);
+
+    function wrapLabels() {
+        labels.each(function(d) {
+            const label = d3.select(this);
+            const text = label.select<SVGTextElement>('.desc-text');
+            text.text(null);
+            const measure = text.append('tspan');
+            const lines: string[] = [];
+            let line = '';
+            for (const word of d.description.split(/\s+/)) {
+                const candidate = line ? line + ' ' + word : word;
+                measure.text(candidate);
+                if (line && measure.node()!.getComputedTextLength() > maxRadius * 1.4) {
+                    lines.push(line);
+                    line = word;
+                } else {
+                    line = candidate;
+                }
+            }
+            lines.push(line);
+            measure.remove();
+            const lineHeight = 15;
+            const titleY = -(lines.length * lineHeight) / 2;
+            label.select('.name-text').attr('y', titleY);
+            text.selectAll('tspan').data(lines).join('tspan')
+                .attr('x', 0).attr('y', (_, i) => titleY + 20 + i * lineHeight)
+                .text((value, i) => value + (i < lines.length - 1 ? ' ' : ''));
+        });
+    }
+    wrapLabels();
+    if (document.fonts.status === 'loading') {
+        void document.fonts.ready.then(() => { if (svg?.isConnected) wrapLabels(); });
+    }
 
     // Remove tooltip since we're showing info on click
     node.selectAll('title').remove();
 
-    simulation.on('tick', () => {
+    function positionNodes() {
         node.attr('transform', d => `translate(${d.x},${d.y})`);
-        
-        // Update icon positions
-        node.selectAll<SVGImageElement, Node>('.tech-icon')
-            .attr('x', d => {
-                const padding = (d.padding ?? 0.3) * d.r;
-                return -d.r + padding;
-            })
-            .attr('y', d => {
-                const padding = (d.padding ?? 0.3) * d.r;
-                return -d.r + padding;
-            })
-            .attr('width', d => {
-                const padding = (d.padding ?? 0.3) * d.r * 2;
-                return d.r * 2 - padding;
-            })
-            .attr('height', d => {
-                const padding = (d.padding ?? 0.3) * d.r * 2;
-                return d.r * 2 - padding;
-            });
-    });
+    }
+    simulation.on('tick', positionNodes);
 }
 
 // Export method to start animation
@@ -620,7 +540,7 @@ let nodes = $derived(technologies.map((tech, index) => ({
     originalRadius: tech.proficiency * BUBBLE_SIZE_SCALE
 })) as Node[]);
 // Calculate the maximum radius for expanded state
-let maxRadius = $derived(Math.max(...nodes.map(n => n.r)) * 2);
+let maxRadius = $derived(Math.max(0, ...technologies.map(tech => tech.proficiency)) * BUBBLE_SIZE_SCALE * 2);
 </script>
 
 <div class="bubble-chart-container" style:--chart-width={browser ? width + 'px' : undefined}>
@@ -677,6 +597,25 @@ let maxRadius = $derived(Math.max(...nodes.map(n => n.r)) * 2);
 :global(.node) {
     cursor: pointer;
     pointer-events: all;
+}
+
+.bubble-chart :global(.tech-icon) {
+    opacity: 1;
+    transition: opacity 75ms ease-out;
+}
+.bubble-chart :global(.tech-text) {
+    opacity: 0;
+    transition: opacity 45ms linear;
+}
+.bubble-chart :global(.node[aria-pressed="true"] .tech-icon) { opacity: 0; }
+.bubble-chart :global(.node[aria-pressed="true"] .tech-text) {
+    opacity: 1;
+    transition: opacity 75ms ease-out 55ms;
+}
+@media (prefers-reduced-motion: reduce) {
+    .bubble-chart :global(.node .tech-icon),
+    .bubble-chart :global(.node .tech-text),
+    .bubble-chart :global(.node[aria-pressed="true"] .tech-text) { transition: none; }
 }
 
 .bubble-chart :global(.node:hover circle) {

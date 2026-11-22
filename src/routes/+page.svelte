@@ -13,14 +13,14 @@
 			svg: '/assets/icons/kubernets.svg',
 			proficiency: 5 as const,
 			description:
-				'I work on Kubernetes controllers and GPU scheduling for training and inference.',
+				'2 YoE creating and operating (and very, very occasionally breaking) production clusters with 3000+ nodes',
 			type: 'infra'
 		},
 		{
 			name: 'Istio',
 			svg: '/assets/icons/istio.svg',
 			proficiency: 2 as const,
-			description: 'I use Istio to route requests to models and control which services can talk to each other.',
+			description: 'Developed service mesh with mTLS, authorization policies, and load balancing',
 			type: 'infra'
 		},
 		{
@@ -28,7 +28,7 @@
 			svg: '/assets/icons/aws.svg',
 			proficiency: 5 as const,
 			description:
-				'I started with Lambda at Amazon. At Roblox I set up EFA so GPU nodes on AWS could talk to each other during training.',
+				'Certified developer, 3 YoE with DynamoDB, S3, EKS, ELB, Lambda, CloudFormation and more',
 			type: 'infra',
 			padding: 0.4
 		},
@@ -37,7 +37,7 @@
 			svg: '/assets/icons/prometheus.svg',
 			proficiency: 2 as const,
 			description:
-				'I use Prometheus and Grafana to see what our clusters are doing.',
+				'Implemented observability solutions with Prometheus Operator, Grafana dashboards, and Grafana Alloy',
 			type: 'infra'
 		},
 		{
@@ -45,21 +45,21 @@
 			svg: '/assets/icons/argocd.svg',
 			proficiency: 2 as const,
 			description:
-				'I use Argo CD to deploy cluster changes from Git and Kargo to roll them out in stages.',
+				'Developed production-ready clusters using ArgoCD GitOps, Helm, Kustomize, and Kargo multistage promotion',
 			type: 'infra'
 		},
 		{
 			name: 'Kubeflow',
 			svg: '/assets/icons/kubeflow.svg',
 			proficiency: 4 as const,
-			description: 'I helped keep notebooks, pipelines and model serving running for hundreds of ML engineers.',
+			description: 'Operated the Kubeflow ML platform (Notebooks, Pipelines, Serving) used by hundreds of internal MLEs',
 			type: 'infra'
 		},
 		{
 			name: 'Docker',
 			svg: '/assets/icons/docker.svg',
 			proficiency: 3 as const,
-			description: 'I built the base images researchers use for training and remote development.',
+			description: 'Created optimized Docker images for ML use cases and remote development',
 			type: 'infra'
 		},
 		{
@@ -89,21 +89,21 @@
 			svg: '/assets/icons/react.svg',
 			proficiency: 5 as const,
 			description:
-				'I used React for the Dive Chat web app and the dashboard I contributed to KubeRay.',
+				'Developed production React applications for startups and big companies with React, Redux, and Material UI',
 			type: 'framework'
 		},
 		{
 			name: 'Nextjs',
 			svg: '/assets/icons/nextjs.svg',
 			proficiency: 1.5 as const,
-			description: 'I’ve used Next.js with Turbopack.',
+			description: 'Adopted latest frontend tooling such as Next.js and TurboPack',
 			type: 'framework'
 		},
 		{
 			name: 'Expo',
 			svg: '/assets/icons/expo.svg',
 			proficiency: 3 as const,
-			description: 'I use Expo and React Native to build for iOS and Android.',
+			description: 'Developed cross-platform mobile apps using Expo and React Native',
 			type: 'framework',
 			padding: 0.4
 		},
@@ -112,7 +112,7 @@
 			svg: '/assets/icons/pytorch.svg',
 			proficiency: 3 as const,
 			description:
-				'I use PyTorch for distributed training and for running models on GPUs.',
+				'Conducted ML research, distributed training, and inference optimization with PyTorch',
 			type: 'framework',
 			padding: 0.4
 		},
@@ -121,7 +121,7 @@
 			svg: '/assets/icons/ray.svg',
 			proficiency: 5 as const,
 			description:
-				'Researchers use the Ray job service I wrote for everything from labeling images to training foundation models.',
+				'Built the Ray infrastructure at my company and drove its widespread adoption for training foundation models',
 			type: 'framework',
 			padding: 0.4
 		},
@@ -139,14 +139,14 @@
 			svg: '/assets/icons/htmlcss.svg',
 			proficiency: 3 as const,
 			description:
-				'Can write semantic HTML and responsive CSS without AI. By the way are they programming languages?',
+				'Can write sematic HTML and responsive CSS without AI. By the way are they programming languages?',
 			type: 'language'
 		},
 		{
 			name: 'C++',
 			svg: '/assets/icons/cpp.svg',
 			proficiency: 2 as const,
-			description: 'I reach for C++ for graphics and robotics.',
+			description: 'Language of choice for computer graphics and robotics research infrastructure',
 			type: 'language'
 		},
 		{
@@ -184,15 +184,23 @@
 <Seo title="Steve Han" description="I build tools for training models and running agents at Roblox. At UT Austin I worked on imitation learning for humanoid robots." />
 
 <p>
-	I’m a software engineer at <a class="link" href="/experience/roblox/"><em>Roblox</em></a>.
-	I build the infrastructure for our internal Slack agent and the platform it runs on.
-	Before that, I pushed for using Ray to run models over large datasets and wrote the service engineers use to submit jobs and find their logs.
+	I'm currently building the Machine Learning Platform for the metaverse at <a
+		class="link"
+		href="/experience/roblox/"><em>Roblox</em></a
+	>.
 </p>
 
 <p>
-	Before Roblox, I spent two summers at <em>Amazon</em> and built the mobile app for
-	<a class="link" href="/experience/orca/"><em>Orca</em></a> with two friends. The app let UT Austin students send money and split bills.
-	In college I spent a lot of weekends at hackathons and <a class="link" href="/projects/#hackathons-heading">won a few</a>.
+	Previously, I interned twice at <em>Amazon</em>, where I built serverless full-stack applications
+	on AWS and became an
+	<a
+		class="link"
+		href="https://www.credly.com/badges/a578df66-4f25-409d-98e4-d99f718d2b65"
+		>AWS certified developer</a
+	>. Before that, I was a founding engineer at a few startups, including one backed by
+	<a class="link" href="https://www.ycombinator.com/companies/orca"><em>Y-Combinator</em></a>. I
+	also attended many Hackathons (and won
+	<a class="link" href="/projects/#hackathons-heading">a few of them</a>).
 </p>
 
 <p class="mb-0">
