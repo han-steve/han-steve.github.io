@@ -8,11 +8,8 @@ const config = {
 	preprocess: [vitePreprocess({})],
 
 	kit: {
-		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
-		// If your environment is not supported or you settled on a specific environment, switch out the adapter.
-		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
-		// TODO: fall back to custom 404? 
-		adapter: adapter()
+		// Static pages, with the branded 404 used by GitHub Pages for unknown routes.
+		adapter: adapter({ fallback: '404.html' })
 	},
 
 	compilerOptions: {

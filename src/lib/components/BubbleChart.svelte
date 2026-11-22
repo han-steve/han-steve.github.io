@@ -37,7 +37,7 @@ interface Node extends Technology, d3.SimulationNodeDatum {
 
 let svg: SVGElement | undefined = $state();
 let container: HTMLDivElement | undefined = $state();
-let width = $state(browser ? window.innerWidth : 1024); // Default width for SSR
+let width = $state(browser ? document.documentElement.clientWidth : 1024); // Default width for SSR
 let height = $derived(width < MOBILE_BREAKPOINT ? 550 : 400);
 let centerX = $derived(width * 0.5);
 let centerY = $derived(height * 0.5);
@@ -45,18 +45,19 @@ let simulation: d3.Simulation<Node, undefined>;
 let lastScrollY = 0;
 let scrollVelocity = 0;
 let scrollTimeout: number;
+let resetInterval: ReturnType<typeof setInterval> | undefined;
+let reducedMotion = false;
 let currentForceY = 0;
 let isVisible = false;
 let hasAnimated = false;
 let expandedNode: Node | null = null;
 let isDragging = false;
-let dragStartTime = 0;
 let headerAnimationDone = $state(false);
 const paddingX = 10;
 const paddingY = 50;
 
 // Subscribe to the header animation state
-headerAnimationComplete.subscribe(value => {
+const unsubscribe = headerAnimationComplete.subscribe(value => {
     headerAnimationDone = value;
     if (headerAnimationDone && isVisible && !hasAnimated) {
         startAnimation();
@@ -66,7 +67,7 @@ headerAnimationComplete.subscribe(value => {
 
 // Handle scroll events with debouncing
 function handleScroll() {
-    if (!browser || !simulation || !isVisible) return;
+    if (!browser || !simulation || !isVisible || reducedMotion) return;
     
     const currentScrollY = window.scrollY;
     scrollVelocity = (currentScrollY - lastScrollY) * 0.5;
@@ -83,7 +84,8 @@ function handleScroll() {
     if (scrollTimeout) clearTimeout(scrollTimeout);
 
     scrollTimeout = window.setTimeout(() => {
-        const resetInterval = setInterval(() => {
+        clearInterval(resetInterval);
+        resetInterval = setInterval(() => {
             if (Math.abs(currentForceY) < 0.1) {
                 currentForceY = 0;
                 simulation.force('scroll', null);
@@ -158,8 +160,8 @@ function getClusterCenters() {
 function initializeSimulation() {
     if (!browser || !container || nodes.length === 0) return;
 
-    // Use viewport width for the simulation area
-    width = window.innerWidth;
+    // Span the viewport while leaving room for classic scrollbars.
+    width = document.documentElement.clientWidth;
     centerX = width * 0.5;
     centerY = height * 0.5;
 
@@ -245,12 +247,24 @@ function initializeSimulation() {
         .enter()
         .append('g')
         .attr('class', 'node')
+        .attr('role', 'button')
+        .attr('tabindex', 0)
+        .attr('aria-label', d => d.name)
+        .attr('aria-description', d => d.description)
+        .attr('aria-pressed', 'false')
+        .on('click', (event, d) => { isDragging = false; handleNodeClick(event, d); })
+        .on('keydown', (event: KeyboardEvent, d) => {
+            if (event.key === 'Enter' || event.key === ' ' || (event.key === 'Escape' && d.isExpanded)) {
+                event.preventDefault();
+                isDragging = false;
+                handleNodeClick(event, d);
+            }
+        })
         .style('opacity', '0')
         .attr('transform', d => `translate(${d.x},${d.y})`)
         .call(d3.drag<SVGGElement, Node>()
             .on('start', (event, d) => {
                 isDragging = false;
-                dragStartTime = Date.now();
                 if (!event.active) simulation.alphaTarget(0.2).restart();
                 d.fx = d.x;
                 d.fy = d.y;
@@ -265,13 +279,6 @@ function initializeSimulation() {
                 // Always clear fixed position on drag end
                 d.fx = null;
                 d.fy = null;
-                
-                // Handle click if it wasn't a drag
-                const dragEndTime = Date.now();
-                const dragDuration = dragEndTime - dragStartTime;
-                if (!isDragging || dragDuration < 200) {
-                    handleNodeClick(event, d);
-                }
             }));
 
     function handleNodeClick(event: any, d: Node) {
@@ -291,6 +298,8 @@ function initializeSimulation() {
         d.r = d.isExpanded ? maxRadius : d.originalRadius!;
         expandedNode = d.isExpanded ? d : null;
 
+        node.attr('aria-pressed', item => String(Boolean(item.isExpanded)));
+
         // Update simulation
         simulation.force('collide', d3.forceCollide<Node>(d => d.r + 2).strength(0.9));
         simulation.alpha(0.5).restart();
@@ -298,7 +307,7 @@ function initializeSimulation() {
         // Update visuals with springy animation
         node.selectAll<SVGCircleElement, Node>('circle')
             .transition()
-            .duration(800)
+            .duration(reducedMotion ? 0 : 800)
             .ease(d3.easeElastic.period(0.5))
             .attr('r', d => d.r);
 
@@ -309,7 +318,7 @@ function initializeSimulation() {
         // Handle icon visibility
         icons
             .transition()
-            .duration(300)
+            .duration(reducedMotion ? 0 : 300)
             .style('opacity', d => d.isExpanded ? 0 : 1)
             .on('end', function(d) {
                 d3.select(this).style('display', d.isExpanded ? 'none' : 'block');
@@ -324,12 +333,12 @@ function initializeSimulation() {
                     .style('display', 'block')
                     .style('opacity', 0)
                     .transition()
-                    .duration(300)
+                    .duration(reducedMotion ? 0 : 300)
                     .style('opacity', 1);
             } else {
                 textGroup
                     .transition()
-                    .duration(300)
+                    .duration(reducedMotion ? 0 : 300)
                     .style('opacity', 0)
                     .on('end', function() {
                         textGroup.style('display', 'none');
@@ -338,15 +347,11 @@ function initializeSimulation() {
         });
     }
 
-    // Add black circle backgrounds
     node.append('circle')
         .attr('r', (d: Node) => d.r)
-        .style('fill', '#1a1a1a')
-        .style('stroke', 'none')
-        .style('cursor', 'pointer')
-        .on('click', function(this: SVGCircleElement, event: MouseEvent, d: any) {
-            handleNodeClick(event, d as Node);
-        });
+        .attr('fill', '#1a1a1a')
+        .attr('stroke', 'none')
+        .style('cursor', 'pointer');
 
     // Add technology icon
     node.append('svg:image')
@@ -434,7 +439,7 @@ function initializeSimulation() {
                 text.append('tspan')
                     .attr('x', 0)
                     .attr('dy', i === 0 ? '-1em' : lineHeight + 'em')
-                    .text(line);
+                    .text(line + ' ');
             });
         });
 
@@ -468,6 +473,21 @@ function initializeSimulation() {
 // Export method to start animation
 export function startAnimation() {
     if (!simulation || !svg) return;
+
+    if (reducedMotion) {
+        const centers = getClusterCenters();
+        nodes.forEach((node, index) => {
+            const center = centers[node.type];
+            node.x = center.x + Math.cos(index * 2.4) * 70;
+            node.y = center.y + Math.sin(index * 2.4) * 70;
+            node.vx = node.vy = 0;
+        });
+        simulation.alpha(1).stop().tick(240);
+        d3.select(svg).selectAll<SVGGElement, Node>('.node')
+            .attr('transform', d => `translate(${d.x},${d.y})`).style('opacity', '1');
+        isVisible = true;
+        return;
+    }
 
     // Reset node positions and velocities
     nodes.forEach(node => {
@@ -503,7 +523,7 @@ export function startAnimation() {
         .attr('transform', (d: Node) => `translate(${d.x},${d.y})`)
         .style('opacity', '0')
         .transition()
-        .duration(800)
+        .duration(reducedMotion ? 0 : 800)
         .style('opacity', '1');
 
     isVisible = true;
@@ -512,12 +532,16 @@ export function startAnimation() {
 
 onMount(() => {
     if (!browser) return;
+    reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     initializeSimulation();
     window.addEventListener('scroll', debouncedScroll, { passive: true });
 
     // Add resize handler
     const handleResize = () => {
-        width = window.innerWidth;
+        const nextWidth = document.documentElement.clientWidth;
+        // Ignore transient collapsed viewports and height-only changes (e.g. browser chrome).
+        if (nextWidth < maxRadius * 2 + paddingX * 2 || nextWidth === width) return;
+        width = nextWidth;
         centerX = width * 0.5;
         
         // Update SVG viewBox
@@ -532,9 +556,9 @@ onMount(() => {
             const newClusterCenters = getClusterCenters();
             simulation
                 .force('x', d3.forceX<Node>(d => newClusterCenters[d.type].x).strength(0.08))
-                .force('y', d3.forceY<Node>(d => newClusterCenters[d.type].y).strength(0.08))
-                .alpha(0.3)
-                .restart();
+                .force('y', d3.forceY<Node>(d => newClusterCenters[d.type].y).strength(0.08));
+            if (reducedMotion && hasAnimated) startAnimation();
+            else simulation.alpha(0.3).restart();
         }
     };
 
@@ -561,23 +585,21 @@ onMount(() => {
         }
     );
 
-    // Ensure container is mounted before observing
-    setTimeout(() => {
-        if (container) {
-            observer.observe(container);
-        }
-    }, 0);
+    if (container) observer.observe(container);
 
     return () => {
         observer.disconnect();
         window.removeEventListener('scroll', debouncedScroll);
         window.removeEventListener('resize', handleResize);
         if (scrollTimeout) clearTimeout(scrollTimeout);
+        clearInterval(resetInterval);
         if (simulation) simulation.stop();
     };
 });
 
 onDestroy(() => {
+    unsubscribe();
+    clearInterval(resetInterval);
     if (!browser) return;
     window.removeEventListener('scroll', debouncedScroll);
     if (scrollTimeout) clearTimeout(scrollTimeout);
@@ -601,9 +623,9 @@ let nodes = $derived(technologies.map((tech, index) => ({
 let maxRadius = $derived(Math.max(...nodes.map(n => n.r)) * 2);
 </script>
 
-<div class="bubble-chart-container">
+<div class="bubble-chart-container" style:--chart-width={browser ? width + 'px' : undefined}>
     <div class="bubble-chart-wrapper">
-        <div class="bubble-chart" bind:this={container}>
+        <div class="bubble-chart" bind:this={container} role="group" aria-label="Technologies — select a bubble to learn more">
             <svg 
                 bind:this={svg}
                 width="100%" 
@@ -617,13 +639,13 @@ let maxRadius = $derived(Math.max(...nodes.map(n => n.r)) * 2);
 <style>
 .bubble-chart-container {
     position: relative;
-    margin: -50px -50vw;
+    margin: -50px calc(var(--chart-width, 100vw) / -2);
     height: var(--chart-height, 400px);
     overflow: hidden;
     display: flex;
     align-items: center;
     left: 50%;
-    width: 100vw;
+    width: var(--chart-width, 100vw);
     pointer-events: none;
 }
 
@@ -654,11 +676,15 @@ let maxRadius = $derived(Math.max(...nodes.map(n => n.r)) * 2);
     transition: fill 0.2s;
 }
 
-:global(.node:hover circle) {
+:global(.node:hover circle),
+:global(.node:focus-visible circle) {
     fill: #2a2a2a;
 }
 
-:global(svg) {
+.bubble-chart :global(.node:focus) { outline: none; }
+.bubble-chart :global(.node:focus-visible circle) { stroke: var(--muted) !important; stroke-width: 3px; paint-order: stroke; }
+
+.bubble-chart :global(svg) {
     pointer-events: none;
 }
 </style>

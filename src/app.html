@@ -1,13 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<meta name="viewport" content="width=device-width" />
-        <!-- Using links loads faster than font-source, which only loads during hydration. Google fonts are also cached. -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz@1,6..72&family=Open+Sans:wght@300..800&display=swap" rel="stylesheet">
+		<link rel="preload" href="%sveltekit.assets%/assets/fonts/open-sans-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#18181b" media="(prefers-color-scheme: dark)" />
+		<script>
+			(() => {
+				let saved;
+				try {
+					saved = localStorage.getItem('theme');
+				} catch {}
+				document.documentElement.dataset.theme =
+					saved === 'dark' ||
+					(saved !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)
+						? 'dark'
+						: 'light';
+			})();
+		</script>
+		<!-- Critical entrance styles must exist before the first body paint. -->
+		<style>
+			html[data-entrance] { overflow: hidden; }
+			html[data-entrance] .entrance-backdrop {
+				display: block; position: fixed; inset: 0; z-index: 40;
+				backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); pointer-events: none;
+			}
+			html[data-entrance] .header-identity { z-index: 50; }
+			html[data-entrance='pending'] .header-identity { visibility: hidden; }
+			@media (prefers-reduced-motion: reduce) {
+				html[data-entrance] { overflow: auto; }
+				html[data-entrance] .entrance-backdrop { display: none; }
+				html[data-entrance='pending'] .header-identity { visibility: visible; }
+			}
+		</style>
+		<script>
+			(() => {
+				const motion = matchMedia('(prefers-reduced-motion: reduce)');
+				if (location.pathname !== '/' || location.hash || motion.matches) return;
+				try { if (localStorage.getItem('skipAnimation') === 'TRUE') return; }
+				catch { return; }
+				const root = document.documentElement;
+				let timer;
+				const release = () => {
+					clearTimeout(timer);
+					motion.removeEventListener('change', motionChanged);
+					window.removeEventListener('pagehide', release);
+					if (root.dataset.entrance === 'pending') delete root.dataset.entrance;
+					delete window.__siteEntrance;
+				};
+				const motionChanged = () => { if (motion.matches) release(); };
+				root.dataset.entrance = 'pending';
+				window.__siteEntrance = { release };
+				motion.addEventListener('change', motionChanged);
+				window.addEventListener('pagehide', release);
+				// A failed or very late application bundle must leave a readable static page.
+				timer = setTimeout(release, 8000);
+			})();
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
