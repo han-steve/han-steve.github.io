@@ -111,11 +111,11 @@ export const experience: ExperienceItem[] = [
 					alt: 'Orca’s group expense screen lists shared trip costs and shows who has paid.',
 					width: 512,
 					height: 1008,
-					caption: 'Group bill splitting, pictured on Orca’s 2022 launch site.'
+					caption: 'In our app, friends could split gas and Airbnb costs in one thread and see who still owed money.'
 				}
 			},
 			{
-				body: 'I also built our launch site and made ads for campus promotions.'
+				body: 'I built our launch site and made our campus ads. We used a Gong Cha deal to show students how cash back worked.'
 			}
 		]
 	},
@@ -128,17 +128,17 @@ export const experience: ExperienceItem[] = [
 		description: 'I rewrote Dive’s group-chat web client in React and TypeScript and worked on sign-up in the mobile app.',
 		sections: [
 			{
-				body: 'Dive combined group chat and event planning. I rewrote its web client in React and TypeScript using Redux and Firebase.'
-			},
-			{
-				body: 'On mobile, I worked with our designers on the sign-up flow and connected it to Firebase.',
+				body: 'Groups used Dive to chat and plan events. I rewrote our web app in React and TypeScript, with Redux and Firebase.',
 				figure: {
 					image: '/assets/experience/dive-calendar.webp',
 					alt: 'Dive’s mobile Events screen has RSVP filters and illustrated cards for a drive-in movie and a hike.',
 					width: 496,
 					height: 644,
-					caption: 'The team’s mobile event calendar, pictured on Dive’s 2021 website.'
+					caption: 'In our calendar, you could see what you’d RSVP’d to and what you were hosting.'
 				}
+			},
+			{
+				body: 'On mobile, I worked with our designers on sign-up. I connected it to Firebase and handled loading and failed requests.'
 			}
 		]
 	}

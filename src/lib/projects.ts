@@ -76,7 +76,7 @@ export const projects: Project[] = [
 		sections: [
 			{
 				points: [
-					'Built the VR interface for TRILL during master’s research at UT Austin. The team used imitation learning to teach a humanoid robot to walk and handle objects.',
+					'Built the VR interface for TRILL during master’s research at UT Austin. We used imitation learning to teach a humanoid robot to walk and handle objects.',
 					'Connected a Quest 2 to MuJoCo and the physical robot. In the ramen demo, an operator guides both hands using the robot’s stereo camera feed.',
 					'Co-authored the TRILL paper. After training on 250 demonstrations per task, the robot removed a spray cap in 9 of 10 trials and put a tool back in its box in 8 of 10.'
 				]
@@ -161,7 +161,7 @@ export const projects: Project[] = [
 					alt: 'Side-by-side replays of the scooter balancing before and after training',
 					width: 640,
 					height: 240,
-					caption: 'On the left, the untrained scooter tips over in half a second. On the right, the same task after 72,000 training steps.',
+					caption: 'My scooter fell over in half a second before training. On the right is the same test after 72,000 training steps.',
 					replay: {
 						webm: '/assets/projects/scooter/balance.webm',
 						mp4: '/assets/projects/scooter/balance.mp4'
@@ -177,7 +177,7 @@ export const projects: Project[] = [
 					alt: 'Overlaid scooter paths from the origin to a red target 50 meters to the left. One green path veers off to the lower right.',
 					width: 1400,
 					height: 788,
-					caption: 'Paths from 200 random starting directions to one fixed target. The scooter came within 4 meters in 199 trials. The green path at bottom right is the one that missed.'
+					caption: 'I ran 200 trials with the scooter pointed in a random direction each time. It got within 4 meters of the red target 199 times. The green line at the bottom right is the one that missed.'
 				}
 			},
 			{
@@ -218,14 +218,14 @@ export const projects: Project[] = [
 		sections: [
 			{
 				points: [
-					'Replaced a stalled ibuprofen-bottle spool and shoelace with a bottle cap and thread from a sewing kit. Once the motor could lift the blind, printed a grooved spool to keep each cord on its own track.'
+					'Replaced a stalled ibuprofen-bottle spool and shoelace with a bottle cap and thread from a sewing kit. With the smaller spool, the motor could lift the blind.'
 				],
 				figure: {
 					image: '/assets/projects/field-notes/sunrise-spool.webp',
 					alt: 'Two blind cords wind onto separate tracks of a blue printed spool attached to a motor.',
 					width: 950,
 					height: 702,
-					caption: 'The printed spool gives each cord its own track.'
+					caption: 'I printed a groove for each cord so they wouldn’t wind over each other.'
 				}
 			},
 			{
