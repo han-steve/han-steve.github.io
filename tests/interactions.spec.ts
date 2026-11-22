@@ -260,7 +260,8 @@ test('homepage additions follow the original bio and bubbles', async ({ page }) 
 	const research = paragraphs.nth(4);
 	await expect(education).toHaveText('I graduated from the University of Texas at Austin with a Masters and a Bachelors in Computer Science, a Bachelors in Math, and a certificate in Spanish.');
 	await expect(research).toContainText('For my master’s, I worked on TRILL at the Robot Perception and Learning Lab (RPL).');
-	await expect(research).toContainText('We used imitation learning to teach humanoid robots to walk and handle objects.');
+	await expect(research).toContainText('I built the VR interface we used to record demonstrations for imitation learning.');
+	await expect(research).toContainText('put a tool back in its box');
 	await expect(research.getByRole('link', { name: 'TRILL', exact: true })).toHaveAttribute('href', '/projects/trill/');
 	await expect(education.locator('xpath=preceding-sibling::*[1]').locator('.bubble-chart')).toHaveCount(1);
 	await expect(education.locator('xpath=preceding-sibling::section')).toHaveCount(0);

@@ -39,7 +39,7 @@ export const talks = [
 	{
 		year: '2025',
 		title: 'How Roblox Trains 3D Foundation Models with Ray',
-		description: 'With Liangjun Feng and Yiqing Wang. I demoed how our researchers could edit and run training code on a live Ray cluster.',
+		description: 'With Liangjun Feng and Yiqing Wang. I showed our training workspace running on the head node of a Ray cluster. Researchers could keep their editor open while the GPU workers scaled down to zero.',
 		context: 'Ray Summit · Roblox',
 		url: 'https://www.youtube.com/watch?v=FhZaVU5-2xE',
 		id: 'FhZaVU5-2xE'
@@ -47,7 +47,7 @@ export const talks = [
 	{
 		year: '2024',
 		title: 'How Roblox Scaled Machine Learning by Leveraging Ray for Efficient Batch Inference',
-		description: 'With Wei Zeng and Yiqing Wang. We compared the cost of computing image embeddings in batches on Ray with sending the same images through our online service.',
+		description: 'With Wei Zeng and Yiqing Wang. I walked through a CLIP job where CPUs prepared the next batch of images while one GPU processed the last. In our benchmark it cost 58% less than running the same job through our online service.',
 		context: 'Ray Summit · Batch inference at Roblox',
 		url: 'https://www.youtube.com/watch?v=BN1CVDZjQRE',
 		id: 'BN1CVDZjQRE'
@@ -74,21 +74,21 @@ export const projects: Project[] = [
 		sections: [
 			{
 				title: 'VR teleoperation',
-				body: 'For my master’s at UT Austin, I built the interface our lab used to record demonstrations for TRILL. We could see through the humanoid’s stereo camera and move its hands with the VR controllers. One camera sent color and the other grayscale, so I paired frames by ID and sent grayscale to both eyes.'
+				body: 'For my master’s at UT Austin, I built the VR interface our lab used to teach a humanoid robot household tasks. Wearing the headset, you could see through the robot’s stereo cameras and move its hands with your controllers. That’s how we filmed the ramen demo above.'
 			},
 			{
-				body: 'Requesting each controller pose from the headset took about 70 ms in simulation. I changed the headset to stream poses continuously, bringing the time to read the latest pose down to about 0.1 ms. On the physical robot, the arm could still lag a fast hand movement by up to a second.',
+				body: 'I wrote the interface in C++ so we could use the same headset with our MuJoCo simulation and the real robot. In simulation, asking the headset where your hands were took about 70 milliseconds per round trip. Streaming the poses let the simulator read the latest one in about 0.1 milliseconds.',
 				figure: {
 					image: '/assets/projects/field-notes/trill-hand-targets.webp',
 					alt: 'Red and blue arrows mark the requested hand poses beside the robot’s grippers in a simulated kitchen.',
 					width: 977,
 					height: 868,
-					caption: 'The arrows show where the operator’s hands are asking the robot to go.'
+					caption: 'The red and blue arrows show where I’m asking each hand to go. The gap between an arrow and the gripper shows how far the robot still has to move.'
 				}
 			},
 			{
 				title: 'Imitation learning',
-				body: 'We collected 250 demonstrations per task. In ten trials on the real robot, the trained policy removed a spray can cap nine times and put a tool back in its box eight times. Our paper was a finalist for the Whole-Body Control Best Paper Award at Humanoids 2023.'
+				body: 'We recorded 250 demonstrations per task and trained policies to repeat them. On the real robot we ran ten trials of each task in a row. The robot took the cap off a spray can nine times and put a tool back in its box eight times.'
 			}
 		],
 		videos: [
@@ -118,22 +118,22 @@ export const projects: Project[] = [
 				features: [
 					{
 						name: 'Terrain',
-						detail: 'Perlin noise sets the elevation. Each chunk contains 32 × 32 × 32 blocks. We mesh just the exposed faces and draw a 5 × 5 grid of chunks around the player. As you walk, new chunks load and the game remembers your edits to old ones.',
+						detail: 'We drew only the exposed faces of each 32 × 32 × 32 chunk. A 5 × 5 grid of chunks follows you as you walk. Walk back to a hill you’ve dug into and the hole is still there.',
 						demos: [{ gif: '/assets/projects/voxcraft/voxel-mesh.gif', label: 'Voxel mesh', alt: 'The voxel mesh around the player in the block world.', size: 180 }]
 					},
-					{ name: 'Textures and lighting', detail: 'Block textures change with altitude. We scatter trees and lanterns across the terrain and use a shader to draw the sky gradient.' },
+					{ name: 'Terrain generation', detail: 'Perlin noise sets the height of the hills. We use the height to choose the block texture and scatter trees and lanterns across the map.' },
 					{
 						name: 'Movement',
-						detail: 'Fly in creative mode or walk in survival mode, where the player collides with solid blocks and automatically jumps up ledges. Press B to switch modes.',
+						detail: 'Press B to switch between flying and walking. On foot, you can walk straight up a one-block ledge.',
 						demos: [{ gif: '/assets/projects/voxcraft/walking.gif', label: 'Walking', alt: 'First-person view of the player walking through the terrain.', size: 180 }]
 					},
 					{
-						name: 'Tools and inventory',
-						detail: 'Press A to open the inventory and point at an item to equip it. The right trigger places a block on the selected face. Swinging the controller mines a block, and equipping the pickaxe speeds that up.',
+						name: 'Building and mining',
+						detail: 'Point at a block and the cursor hugs the face you’re aiming at. Pull the trigger to build there. To mine a block by hand, keep swinging at it. Open the inventory with A and equip the pickaxe to get through it almost instantly.',
 						demos: [
 							{ gif: '/assets/projects/voxcraft/building.gif', label: 'Building', alt: 'The player places blocks using the VR controller.', size: 180 },
 							{ gif: '/assets/projects/voxcraft/pickaxe.gif', label: 'Pickaxe', alt: 'The player selects and uses the pickaxe.', size: 200 },
-							{ gif: '/assets/projects/voxcraft/dig-down.gif', label: 'Digging straight down', alt: 'The player mines the blocks beneath their feet.', size: 180 }
+							{ gif: '/assets/projects/voxcraft/dig-down.gif', label: 'Never dig straight down!', alt: 'The player mines the blocks beneath their feet.', size: 180 }
 						]
 					}
 				]
@@ -162,7 +162,7 @@ export const projects: Project[] = [
 		],
 		sections: [
 			{
-				body: 'For my reinforcement learning final, I modeled a scooter traveling at about 12 mph. The policy could turn the handlebars left or right 30 times a second. My first reward gave it a point for every step it stayed upright. It learned to ride in one big circle.',
+				body: 'Rental scooters were always lying on the sidewalks around campus. I wondered if one could ride itself back to a charger. For my reinforcement learning final at UT Austin, I built a scooter in MuJoCo and gave the policy control of the handlebars. At 12 mph, with a reward for staying upright, it learned to ride in one big circle.',
 				figure: {
 					image: '/assets/projects/scooter/balance.jpg',
 					alt: 'Side-by-side replays of the scooter balancing before and after training',
@@ -176,17 +176,24 @@ export const projects: Project[] = [
 				}
 			},
 			{
-				body: 'To get the scooter to a destination, I gave it the angle to a target 50 meters away. My first version dropped the sign, so left and right looked identical. Once I fixed that, I trained it on 90-degree turns, then U-turns, then random starting directions.',
+				body: 'I put a target 50 meters away and pointed the scooter in the opposite direction. After days of training it still couldn’t make the U-turn. I started it sideways instead. Once it learned the 90-degree turn, it could learn the U-turn too. Training on just those two turns got it steering toward the target from angles it hadn’t practiced.',
 				figure: {
 					image: '/assets/projects/scooter/trajectories.webp',
 					alt: 'Overlaid scooter paths from the origin to a red target 50 meters to the left. One green path veers off to the lower right.',
 					width: 1400,
 					height: 788,
-					caption: 'I ran it 200 times with a random starting heading. It got within 4 meters of the red target 199 times. The green line at the bottom right is the one that missed.'
+					caption: 'After a final round of training with random starting directions, I ran 200 trials with the same target. The scooter got within 4 meters of it 199 times. The green path at the bottom right is the one that missed.'
 				}
 			},
 			{
-				body: 'For the waypoint demo I gave the scooter a new target each time it reached one. It could follow a route with waypoints 50 to 100 meters apart. With a target too close to turn toward, it sometimes kept circling. The policy only saw the direction to the target.'
+				body: 'Then I randomized both the starting point and the destination. The same policy reached a target 50 to 100 meters away in all 200 trials. For the final demo I stopped resetting the simulation. Each time the scooter reached a waypoint, I gave it the next one and let it keep riding.',
+				figure: {
+					image: '/assets/projects/scooter/waypoints.webp',
+					alt: 'A continuous path across the simulated floor changes color at each waypoint.',
+					width: 1280,
+					height: 720,
+					caption: 'One uninterrupted ride. Each color is the path to the next waypoint.'
+				}
 			}
 		],
 		videos: [
@@ -222,10 +229,10 @@ export const projects: Project[] = [
 				}
 			},
 			{
-				body: 'I rented the apartment, so I printed clamps for the bed frame and the piano stand beside the other window. The first piano stand clamp snapped. The second one held.'
+				body: 'I couldn’t drill into my college apartment, so I mounted one motor to my bed frame and the other to a piano stand. Each needed its own 3D-printed clamp.'
 			},
 			{
-				body: 'Powering the motor from the ESP32 kept knocking the board offline. A separate 12-volt supply fixed that and could lift the larger blind. I used HomeSpan to connect the blinds to HomeKit. The repository includes the firmware and the STL files for the mounts and spools.'
+				body: 'The larger blind needed a separate 12-volt supply. I used HomeSpan to put the blinds in Apple Home, where I could choose how far to open them in 10% steps.'
 			}
 		],
 		videos: [

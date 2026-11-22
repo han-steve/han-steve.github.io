@@ -35,7 +35,7 @@ export const experience: ExperienceItem[] = [
 			{
 				title: 'GPU inference clusters',
 				body: [
-					'Designed the cluster infrastructure and deployment automation for Roblox’s new GPU serving platform. I used it to bring up our production and development clusters in about 30 minutes each.',
+					'My teammates and I built the GPU serving clusters behind Roblox’s chat filters. I wrote the Terraform and Kubernetes deployment code that brought up a new cluster in about 30 minutes.',
 					'Designed load balancing and automatic failover, fixed downtime during NGINX redeploys, and spread replicas across nodes so we could upgrade the whole cluster while it served live traffic.',
 					'Cut the time to add serving capacity from eight minutes to three by using local NVMe storage.',
 					'Our new clusters ran larger chat filters at half the cost. The model that detects personal information in chat handled 370,000 requests per second at peak.'
@@ -58,7 +58,7 @@ export const experience: ExperienceItem[] = [
 				body: [
 					'Adapted KubeRay to Roblox’s schedulers and built the Go job service and dashboard. The platform handled more than 100 jobs a day.',
 					'Enabled RDMA for distributed training and helped 3D researchers process petabytes of data on Ray.',
-					'Connected researchers’ editors to running Ray clusters, cutting the time to test a code change from over ten minutes to seconds.'
+					'Put a code editor on the Ray head node so researchers could try a change in seconds. They used to rebuild a container and wait over ten minutes. The GPU workers could scale to zero while the editor stayed open.'
 				],
 				articles: [{
 					title: 'Running AI Inference at Scale in the Hybrid Cloud',
