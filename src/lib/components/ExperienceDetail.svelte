@@ -59,7 +59,7 @@
 	<footer><a class="text-link" href="/cv/">Full CV</a></footer>
 </article>
 <style>
-	.job { max-width: 72ch; margin-inline: auto; padding: 56px clamp(24px, 5vw, 48px) 48px; overflow-wrap: anywhere; }
+	.job { max-width: 72ch; margin-inline: auto; padding: var(--sheet-controls-height) clamp(24px, 5vw, 48px) 48px; overflow-wrap: anywhere; }
 	.company-heading { --company-mark-size: clamp(40px, 6vw, 48px); display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
 	.job h1 { margin: 0; font-size: clamp(28px, 4vw, 36px); line-height: 1.2; }
 	.job h1:focus { outline: none; }

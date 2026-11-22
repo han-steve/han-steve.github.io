@@ -556,7 +556,8 @@ em { font-style: normal; font-weight: 600; }
 .project-dialog::backdrop { background: transparent; }
 .project-dialog:focus { outline: none; }
 .project-sheet {
-	--sheet-controls-height: 56px;
+	--sheet-controls-height: 68px;
+	--sheet-close-size: 44px;
 	position: relative; width: calc(100% - 64px); max-width: 960px; height: calc(100dvh - 64px);
 	margin: 32px auto; border-radius: 20px; background: var(--paper); overflow: hidden;
 	box-shadow: var(--sheet-shadow); transform-origin: center top;
@@ -570,13 +571,28 @@ em { font-style: normal; font-weight: 600; }
 	content: ''; position: absolute; inset: 0 0 auto; height: var(--sheet-controls-height);
 	z-index: 6; background: var(--paper);
 }
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	.sheet-with-toolbar::before {
+		background: color-mix(in srgb, var(--paper) 72%, transparent);
+		-webkit-backdrop-filter: blur(16px);
+		backdrop-filter: blur(16px);
+	}
+}
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+	.sheet-with-toolbar::before {
+		background: var(--paper);
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+	}
+}
 .sheet-close {
-	position: absolute; z-index: 8; top: 16px; right: 16px; display: grid; place-items: center;
-	width: 40px; height: 40px; border-radius: 50%; color: #fff; background: #242424cc; backdrop-filter: blur(12px);
+	position: absolute; z-index: 8; top: calc((var(--sheet-controls-height) - var(--sheet-close-size)) / 2); right: 12px; display: grid; place-items: center;
+	width: var(--sheet-close-size); height: var(--sheet-close-size); border-radius: 50%; color: #fff; background: #242424cc; backdrop-filter: blur(12px);
 	transition: background 180ms;
 }
 .sheet-close:hover { background: #111; }
 .sheet-close:focus-visible { outline-color: #fff; outline-offset: 3px; }
+.sheet-with-toolbar .sheet-close:focus-visible { outline-color: var(--ink); }
 .sheet-handle { position: absolute; top: 0; left: calc(50% - 48px); width: 96px; height: 28px; z-index: 7; cursor: grab; touch-action: none; }
 .sheet-handle span { display: block; width: 36px; height: 4px; margin: 10px auto; border-radius: 2px; background: var(--handle-fill, #ffffffd9); box-shadow: 0 1px 4px #0008; }
 .sheet-with-toolbar .sheet-handle span { background: var(--ink); box-shadow: none; }

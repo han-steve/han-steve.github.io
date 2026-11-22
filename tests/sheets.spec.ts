@@ -222,7 +222,7 @@ test('mobile pull-down tracks the finger, cancels short pulls and dismisses to t
 	await context.close();
 });
 
-test('the sheet toolbar shields scrolled text and clears when the cover returns', async ({ page }) => {
+test('the scrolled toolbar blurs the article, leaves space around the close control and clears over the cover', async ({ page }) => {
 	await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'light' });
 	await page.goto('/projects/self-steering-scooter/');
 	const sheet = page.locator('.project-sheet');
@@ -237,14 +237,19 @@ test('the sheet toolbar shields scrolled text and clears when the cover returns'
 	const layers = await grip.evaluate(el => {
 		const grip = el.getBoundingClientRect();
 		const sheet = el.closest('.project-sheet')!;
+		const bar = getComputedStyle(sheet, '::before');
+		const close = sheet.querySelector('.sheet-close')!.getBoundingClientRect();
+		const top = close.top - sheet.getBoundingClientRect().top;
+		const bottom = parseFloat(bar.height) - top - close.height;
 		return {
-			background: getComputedStyle(sheet, '::before').backgroundColor,
-			height: getComputedStyle(sheet, '::before').height,
+			blur: bar.backdropFilter,
+			isTranslucent: bar.backgroundColor.includes('0.72'),
+			top, bottom, targetSize: close.height,
 			belowGrip: document.elementFromPoint(grip.right + 70, grip.y)?.classList.contains('project-sheet'),
 			gripIsOnTop: document.elementFromPoint(grip.x + grip.width / 2, grip.y + 2) === el
 		};
 	});
-	expect(layers).toEqual({ background: 'rgb(255, 255, 255)', height: '56px', belowGrip: true, gripIsOnTop: true });
+	expect(layers).toEqual({ blur: 'blur(16px)', isTranslucent: true, top: 12, bottom: 12, targetSize: 44, belowGrip: true, gripIsOnTop: true });
 	await scroll.evaluate(el => { el.scrollTop = 0; });
 	await expect(sheet).not.toHaveClass(/sheet-with-toolbar/);
 	await expect(grip).toHaveCSS('backdrop-filter', /invert\(1\)/);

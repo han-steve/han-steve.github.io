@@ -27,8 +27,8 @@ export const experience: ExperienceItem[] = [
 				title: 'Agent infrastructure',
 				body: [
 					'Built the Slack integration and Kubernetes clusters for our internal agent platform. About 1,000 people use it each month, and the agent gets tagged about 2,000 times a day in Slack.',
-					'Built the Kubernetes sandbox provider and integrated agent-sandbox. A pool of ready sandboxes brought startup below one second.',
-					'Wrote Temporal workflows to shut down idle sandboxes and resume sessions. Workspace files stay on EBS between visits to the same Slack thread.',
+					'Built our Kubernetes sandbox provider with agent-sandbox and gVisor for code isolation. A pool of ready sandboxes brought startup below one second.',
+					'Wrote Temporal workflows to release idle sandboxes and restore the same workspace when a user resumed a Slack session. Workspace files persisted in cloud storage between sessions.',
 					'Built a Slack bot that checks stuck training jobs and answers debugging questions from their logs (6,400 invocations).'
 				]
 			},
@@ -105,7 +105,7 @@ export const experience: ExperienceItem[] = [
 		description: 'I built the mobile app and launch site for Orca, where UT Austin students could send money and split bills.',
 		sections: [
 			{
-				body: 'Two high school friends started Orca while I was at UT Austin. I joined as the founding engineer and built the React Native app students used to pay each other and split bills. We were in Y Combinator’s Winter 2022 batch.',
+				body: 'I worked with two friends on Orca, a fintech startup for UT Austin students. I built the React Native app for sending money and splitting bills. We were in Y Combinator’s Winter 2022 batch.',
 				figure: {
 					image: '/assets/experience/orca-bill-splitting.png',
 					alt: 'Orca’s group expense screen lists shared trip costs and shows who has paid.',

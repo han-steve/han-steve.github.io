@@ -33,8 +33,8 @@
 					About 1,000 people use it each month. The agent gets tagged about 2,000 times a day in Slack.
 				</p>
 				<p>
-					I integrated agent-sandbox and kept a pool of sandboxes ready so sessions could start in under a second.
-					My Temporal workflows shut down idle sandboxes and reattach the workspace on EBS when someone returns to the thread.
+					I integrated agent-sandbox and gVisor on Kubernetes. A pool of ready sandboxes let sessions start in under a second.
+					My Temporal workflows released idle sandboxes and restored the workspace from cloud storage when someone returned to the Slack thread.
 				</p>
 				<h4>Senior Software Engineer · ML Platform</h4>
 				<span class="cv-date">August 2025 — June 2026</span>
@@ -90,8 +90,8 @@
 				<h4>Founding Engineer</h4>
 				<span class="cv-date">February — July 2022 · Austin</span>
 				<p>
-					Two friends and I worked on an app that let UT Austin students send money and split bills.
-					I built the mobile frontend in React Native and made the website and ads.
+					Worked with two friends on a fintech startup for UT Austin students.
+					Built the React Native app, launch site and campus ads.
 				</p>
 			</div>
 			<div class="cv-entry">
