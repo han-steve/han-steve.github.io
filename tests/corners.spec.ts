@@ -35,7 +35,7 @@ async function sampleCorners(page: Page, slug: string, label: string) {
 
 for (const scenario of [
 	{slug:'voxcraft-vr',title:'VoxCraft VR',asset:'voxcraft.png',scheme:'light',width:1440},
-	{slug:'project-sunrise',title:'Project Sunrise',asset:'field-notes/sunrise-spool.webp',scheme:'dark',width:390}
+	{slug:'project-sunrise',title:'Project Sunrise',asset:'sunrise-hardware.png',scheme:'dark',width:390}
 ] as const) {
 	test(`${scenario.scheme}: rounded project icon survives every opening and closing snapshot`, async ({page}) => {
 		await page.setViewportSize({width:scenario.width,height:1000});

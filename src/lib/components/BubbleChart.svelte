@@ -349,8 +349,8 @@ function initializeSimulation() {
 
     node.append('circle')
         .attr('r', (d: Node) => d.r)
-        .attr('fill', '#1a1a1a')
-        .attr('stroke', 'none')
+        .attr('fill', 'url(#technology-surface)')
+        .attr('stroke', 'var(--bubble-edge)')
         .style('cursor', 'pointer');
 
     // Add technology icon
@@ -386,7 +386,7 @@ function initializeSimulation() {
         .attr('class', 'name-text')
         .attr('dy', '-3em')
         .attr('text-anchor', 'middle')
-        .style('fill', 'white')
+        .style('fill', 'var(--bubble-ink)')
         .style('font-size', '14px')
         .style('font-weight', 'bold')
         .text(d => d.name);
@@ -395,7 +395,7 @@ function initializeSimulation() {
     textGroup.append('text')
         .attr('class', 'desc-text')
         .attr('text-anchor', 'middle')
-        .style('fill', 'white')
+        .style('fill', 'var(--bubble-ink)')
         .style('font-size', '12px')
         .each(function(d) {
             const text = d3.select(this);
@@ -631,7 +631,14 @@ let maxRadius = $derived(Math.max(...nodes.map(n => n.r)) * 2);
                 width="100%" 
                 {height}
                 style="background-color: transparent;"
-            ></svg>
+            >
+                <defs>
+                    <radialGradient id="technology-surface" cx="35%" cy="20%" r="85%">
+                        <stop offset="0%" stop-color="var(--bubble-highlight)" />
+                        <stop offset="100%" stop-color="var(--bubble-surface)" />
+                    </radialGradient>
+                </defs>
+            </svg>
         </div>
     </div>
 </div>
@@ -672,13 +679,8 @@ let maxRadius = $derived(Math.max(...nodes.map(n => n.r)) * 2);
     pointer-events: all;
 }
 
-:global(.node circle) {
-    transition: fill 0.2s;
-}
-
-:global(.node:hover circle),
-:global(.node:focus-visible circle) {
-    fill: #2a2a2a;
+.bubble-chart :global(.node:hover circle) {
+    filter: brightness(1.12);
 }
 
 .bubble-chart :global(.node:focus) { outline: none; }

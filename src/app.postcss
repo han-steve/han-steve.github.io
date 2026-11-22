@@ -495,7 +495,12 @@ em { font-style: normal; font-weight: 600; }
 	margin: 0;
 }
 .project-archive {
+	padding-top: 8px;
 	margin-bottom: 80px;
+}
+.project-archive > h1 {
+	font-size: 28px;
+	margin-bottom: 8px;
 }
 .filter-bar {
 	display: flex;
@@ -511,7 +516,7 @@ em { font-style: normal; font-weight: 600; }
 }
 .filter-bar button.active { color: var(--ink); background: var(--soft); }
 .filter-bar button:hover { color: var(--ink); background: var(--hover-surface); box-shadow: var(--hover-shadow); }
-.project-archive .filter-bar { column-gap: 6px; }
+.project-archive .filter-bar { column-gap: 6px; margin-bottom: 6px; }
 .project-archive .filter-bar button {
 	min-height: 44px; padding: 0; background: transparent; box-shadow: none; border-radius: 999px;
 }
@@ -551,6 +556,7 @@ em { font-style: normal; font-weight: 600; }
 .project-dialog::backdrop { background: transparent; }
 .project-dialog:focus { outline: none; }
 .project-sheet {
+	--sheet-controls-height: 56px;
 	position: relative; width: calc(100% - 64px); max-width: 960px; height: calc(100dvh - 64px);
 	margin: 32px auto; border-radius: 20px; background: var(--paper); overflow: hidden;
 	box-shadow: var(--sheet-shadow); transform-origin: center top;
@@ -558,8 +564,12 @@ em { font-style: normal; font-weight: 600; }
 	transition: transform 240ms cubic-bezier(.22,1,.36,1), border-radius 180ms, box-shadow 180ms;
 }
 .project-sheet.dragging { transition: none; user-select: none; -webkit-user-select: none; will-change: transform; }
-.sheet-scroll { height: 100%; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: none; }
+.sheet-scroll { height: 100%; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: none; scroll-padding-top: var(--sheet-controls-height); }
 .sheet-scroll::-webkit-scrollbar { display: none; }
+.sheet-with-toolbar::before {
+	content: ''; position: absolute; inset: 0 0 auto; height: var(--sheet-controls-height);
+	z-index: 6; background: var(--paper);
+}
 .sheet-close {
 	position: absolute; z-index: 8; top: 16px; right: 16px; display: grid; place-items: center;
 	width: 40px; height: 40px; border-radius: 50%; color: #fff; background: #242424cc; backdrop-filter: blur(12px);
@@ -569,10 +579,10 @@ em { font-style: normal; font-weight: 600; }
 .sheet-close:focus-visible { outline-color: #fff; outline-offset: 3px; }
 .sheet-handle { position: absolute; top: 0; left: calc(50% - 48px); width: 96px; height: 28px; z-index: 7; cursor: grab; touch-action: none; }
 .sheet-handle span { display: block; width: 36px; height: 4px; margin: 10px auto; border-radius: 2px; background: var(--handle-fill, #ffffffd9); box-shadow: 0 1px 4px #0008; }
-.project-sheet[data-project-surface^='experience-'] .sheet-handle { --handle-fill: var(--muted); }
+.sheet-with-toolbar .sheet-handle span { background: var(--ink); box-shadow: none; }
 .sheet-handle:active { cursor: grabbing; }
 @supports ((backdrop-filter: invert(1)) or (-webkit-backdrop-filter: invert(1))) {
-	.sheet-handle span {
+	:where(.project-sheet:not(.sheet-with-toolbar)) .sheet-handle span {
 		/* Render a light grip over dark pixels and a dark grip over light pixels. */
 		--handle-contrast: grayscale(1) brightness(1.12) contrast(20) invert(1) contrast(.82);
 		background: transparent;
@@ -582,7 +592,7 @@ em { font-style: normal; font-weight: 600; }
 	}
 }
 @media (forced-colors: active) {
-	.sheet-handle span {
+	.project-sheet .sheet-handle span {
 		forced-color-adjust: none;
 		background: CanvasText;
 		-webkit-backdrop-filter: none;
@@ -1084,17 +1094,17 @@ figcaption { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top:
 	.experience-row { --row-hover-surface: light-dark(#f1f3f4, var(--hover-surface)); }
 }
 @media (hover: hover) {
-	:is(.project-row, .hackathon-entry, .experience-row, .talk-row, .post-row):hover {
+	:is(.project-row, .experience-row, .talk-row, .post-row):hover {
 		--muted: var(--hover-muted);
 		background-color: var(--row-hover-surface, var(--hover-surface));
 		box-shadow: var(--hover-shadow);
 	}
 }
-:is(.project-row, .hackathon-entry, .experience-row, .talk-row, .post-row):is(:focus-visible, :active) {
+:is(.project-row, .experience-row, .talk-row, .post-row):is(:focus-visible, :active) {
 	--muted: var(--hover-muted);
 	background-color: var(--row-hover-surface, var(--hover-surface));
 }
-:is(.project-row, .hackathon-entry, .experience-row, .talk-row, .post-row):focus-visible {
+:is(.project-row, .experience-row, .talk-row, .post-row):focus-visible {
 	outline: 2px solid var(--muted);
 	outline-offset: -2px;
 }
@@ -1189,10 +1199,9 @@ figcaption { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top:
 
 .hackathons { margin-top: 64px; }
 .hackathons h2 { font-size: 22px; margin-bottom: 20px; }
-.hackathon-entry { display: block; padding: 18px 16px; margin: 0 -16px 8px; border-radius: 12px; transition: background 180ms, box-shadow 180ms; }
+.hackathon-entry + .hackathon-entry { margin-top: 20px; }
 .hackathon-entry h3 { display: flex; justify-content: space-between; gap: 20px; font-size: 17px; font-weight: 600; margin: 0 0 6px; }
 .hackathon-entry h3 span { font-size: 13px; font-weight: 400; color: var(--muted); }
 .hackathon-entry p { font-size: 14px; color: var(--muted); margin: 0 0 5px; }
-.hackathon-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
-.devpost-link { font-size: 12px; color: var(--ink); text-decoration: underline; text-underline-offset: .2em; }
-.hackathon-entry small { font-size: 12px; color: var(--muted); }
+.hackathon-entry small { display: block; font-size: 12px; color: var(--muted); }
+.hackathon-entry .text-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; }

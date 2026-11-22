@@ -19,10 +19,8 @@
 	title="Projects — Steve Han"
 	description="Steve Han’s projects in robotics, VR and home automation."
 />
-<div class="shell page-top">
-	<h1>Projects</h1>
-</div>
-<section class="shell project-archive" aria-label="Projects">
+<section class="shell project-archive" aria-labelledby="projects-title">
+	<h1 id="projects-title">Projects</h1>
 	<div class="filter-bar" role="group" aria-label="Filter projects">
 		{#each filters as label}<button
 				class:active={filter === label}
@@ -36,14 +34,13 @@
 	<section class="hackathons" aria-labelledby="hackathons-heading">
 		<h2 id="hackathons-heading">Hackathons</h2>
 		{#each hackathons as project}
-			<a class="hackathon-entry" href={project.url}>
+			<article class="hackathon-entry">
 				<h3>{project.title}<span>{project.year}</span></h3>
 				<p>{project.description}</p>
-				<div class="hackathon-meta">
-					<small>{project.event} · {project.award}</small>
-					<span class="devpost-link">Devpost <span aria-hidden="true">↗</span></span>
-				</div>
-			</a>
+				<small>{project.event} · {project.award}</small>
+				<a class="text-link" href={project.url}
+					>View submission on Devpost<span class="sr-only"> — {project.title}</span></a>
+			</article>
 		{/each}
 	</section>
 </section>

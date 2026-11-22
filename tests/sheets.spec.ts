@@ -222,14 +222,42 @@ test('mobile pull-down tracks the finger, cancels short pulls and dismisses to t
 	await context.close();
 });
 
-test('direct project reload closes to the archive and new images are real source assets', async ({ page }) => {
+test('the sheet toolbar shields scrolled text and clears when the cover returns', async ({ page }) => {
+	await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'light' });
+	await page.goto('/projects/trill/');
+	const sheet = page.locator('.project-sheet');
+	const scroll = page.locator('.sheet-scroll');
+	const grip = page.locator('.sheet-handle span');
+	await expect(sheet).not.toHaveClass(/sheet-with-toolbar/);
+	await scroll.evaluate(el => {
+		el.scrollTop = el.querySelector<HTMLElement>('.case-body')!.offsetTop;
+	});
+	await expect(sheet).toHaveClass(/sheet-with-toolbar/);
+	await expect(grip).toHaveCSS('background-color', 'rgb(23, 23, 23)');
+	const layers = await grip.evaluate(el => {
+		const grip = el.getBoundingClientRect();
+		const sheet = el.closest('.project-sheet')!;
+		return {
+			background: getComputedStyle(sheet, '::before').backgroundColor,
+			height: getComputedStyle(sheet, '::before').height,
+			belowGrip: document.elementFromPoint(grip.right + 70, grip.y)?.classList.contains('project-sheet'),
+			gripIsOnTop: document.elementFromPoint(grip.x + grip.width / 2, grip.y + 2) === el
+		};
+	});
+	expect(layers).toEqual({ background: 'rgb(255, 255, 255)', height: '56px', belowGrip: true, gripIsOnTop: true });
+	await scroll.evaluate(el => { el.scrollTop = 0; });
+	await expect(sheet).not.toHaveClass(/sheet-with-toolbar/);
+	await expect(grip).toHaveCSS('backdrop-filter', /invert\(1\)/);
+});
+
+test('direct project reload closes to the archive and the Sunrise cover uses the original hardware photo', async ({ page }) => {
 	await page.emulateMedia({ reducedMotion: 'reduce' });
 	await page.goto('/projects/project-sunrise/');
 	await page.reload();
 	await expect(page.locator('.media-poster')).toHaveAttribute('src', '/assets/projects/sunrise-hardware.png');
 	await page.getByRole('link', { name: 'Close project', exact: true }).click();
 	await expect(page).toHaveURL(/\/projects\/$/);
-	await expect(page.getByRole('link', { name: 'Explore Project Sunrise', exact: true }).locator('img')).toHaveAttribute('src', '/assets/projects/field-notes/sunrise-spool.webp');
+	await expect(page.getByRole('link', { name: 'Explore Project Sunrise', exact: true }).locator('img')).toHaveAttribute('src', '/assets/projects/sunrise-hardware.png');
 	await expect(page.getByRole('link', { name: 'Explore Ray at Roblox', exact: true })).toHaveCount(0);
 	await page.goto('/projects/ray-at-roblox/');
 	await expect(page).toHaveURL(/\/experience\/roblox\/$/);
@@ -246,7 +274,7 @@ test('direct project reload closes to the archive and new images are real source
 	await expect(page.getByRole('link', { name: /Ray Summit/ })).toHaveCount(2);
 	await expect(page.locator('.job section h2').first()).toHaveText('Agent infrastructure');
 	const ray = page.locator('section').filter({ has: page.getByRole('heading', { name: 'Batch inference and training on Ray' }) });
-	const safety = page.locator('section').filter({ has: page.getByRole('heading', { name: 'GPU clusters for chat safety' }) });
+	const safety = page.locator('section').filter({ has: page.getByRole('heading', { name: 'GPU inference clusters' }) });
 	await expect(ray.getByRole('link', { name: 'Running AI Inference at Scale in the Hybrid Cloud' })).toHaveAttribute('href', /about\.roblox\.com\/newsroom\/2024\/09\//);
 	await expect(safety.locator('a[href^="https://about.roblox.com/newsroom/"]')).toHaveCount(2);
 });

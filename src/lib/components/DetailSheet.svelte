@@ -15,6 +15,7 @@
 	let handle: HTMLDivElement;
 	let drag = $state(0);
 	let dragging = $state(false);
+	let coverCleared = $state(false);
 	let closing = false;
 	async function dismiss(reason: 'control' | 'gesture' | 'outside' = 'control') {
 		if (closing) return;
@@ -46,6 +47,15 @@
 		if (dialog.open) dialog.close();
 		dialog.showModal();
 		dialog.focus({ preventScroll: true });
+		const cover = scroll.querySelector('.project-hero');
+		coverCleared = !cover;
+		const coverObserver = cover && new IntersectionObserver(([entry]) => {
+			coverCleared = !entry.isIntersecting;
+		}, {
+			root: scroll,
+			rootMargin: `-${getComputedStyle(sheet).getPropertyValue('--sheet-controls-height').trim()} 0px 0px`
+		});
+		if (cover) coverObserver?.observe(cover);
 		if (shallowPath($page.state) && !$page.state.skipSheetMotion && !$navigationTransitionActive && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
 			const timing = { duration: 280, easing: 'cubic-bezier(.22,1,.36,1)' };
 			backdrop.animate([{ opacity: 0 }, { opacity: 1 }], timing);
@@ -117,6 +127,7 @@
 		handle.addEventListener('lostpointercapture', mouseCancel);
 		dialog.addEventListener('click', outside);
 		return () => {
+			coverObserver?.disconnect();
 			dialog.close();
 			queueMicrotask(restoreSheetFocus);
 			document.body.style.overflow = previousOverflow;
@@ -140,7 +151,8 @@
 	style={`--dismiss-progress:${Math.min(drag / 400, .8)}`}></div>
 <dialog open class="project-dialog" aria-labelledby={detail.kind + '-title'} tabindex="-1" bind:this={dialog}
 	oncancel={event => { event.preventDefault(); void dismiss(); }}>
-	<div class="project-sheet" class:dragging class:transitioning={$navigationTransitionActive} bind:this={sheet}
+	<div class="project-sheet" class:dragging class:transitioning={$navigationTransitionActive}
+		class:sheet-with-toolbar={detail.kind === 'experience' || coverCleared} bind:this={sheet}
 		data-project-surface={key} style:view-transition-name={`project-${key}-surface`}
 		style={`--sheet-drag:${drag}px;--sheet-scale:${1 - Math.min(drag / 1100, .16)}`}>
 		<div class="sheet-handle" bind:this={handle} aria-hidden="true"><span></span></div>

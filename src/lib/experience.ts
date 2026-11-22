@@ -26,17 +26,19 @@ export const experience: ExperienceItem[] = [
 			{
 				title: 'Agent infrastructure',
 				body: [
-					'Built the infrastructure for our internal Slack agent and the platform it runs on. About 1,000 people use the platform each month, with over 10,000 invocations a week.',
-					'Wrote Temporal workflows to start and stop Kubernetes sandboxes. Stored workspace files on EBS so users could reopen the same files from their Slack thread.',
+					'Built the Slack integration and Kubernetes clusters for our internal agent platform. About 1,000 people use it each month, and the agent gets tagged about 2,000 times a day in Slack.',
+					'Built the Kubernetes sandbox provider and integrated agent-sandbox. A pool of ready sandboxes brought startup below one second.',
+					'Wrote Temporal workflows to shut down idle sandboxes and resume sessions. Workspace files stay on EBS between visits to the same Slack thread.',
 					'Built a Slack bot that checks stuck training jobs and answers debugging questions from their logs (6,400 invocations).'
 				]
 			},
 			{
-				title: 'GPU clusters for chat safety',
+				title: 'GPU inference clusters',
 				body: [
-					'Helped build the GPU clusters that serve Roblox’s chat filters. The new clusters ran larger text filters at half the cost.',
-					'Wrote the automation that brought a new cluster online in about 30 minutes. Designed automatic traffic failover and cut autoscaling time from eight minutes to three.',
-					'Split deployments by model in Argo CD so teams could release independently. Verified in load tests that a running model could switch to Argo Rollouts without dropping traffic.'
+					'Designed the cluster infrastructure and deployment automation for Roblox’s new GPU serving platform. I used it to bring up our production and development clusters in about 30 minutes each.',
+					'Designed load balancing and automatic failover, fixed downtime during NGINX redeploys, and spread replicas across nodes so we could upgrade the whole cluster while it served live traffic.',
+					'Cut the time to add serving capacity from eight minutes to three by using local NVMe storage.',
+					'Our new clusters ran larger chat filters at half the cost. The model that detects personal information in chat handled 370,000 requests per second at peak.'
 				],
 				articles: [
 					{

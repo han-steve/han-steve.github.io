@@ -100,7 +100,10 @@ test('quiet circles, circular focus and raised theme handle stay clear in both t
    const circle=page.getByRole('button',{name:'AWS',exact:true});
    await page.locator('.bubble-chart').scrollIntoViewIfNeeded();
    await expect(circle).toHaveCSS('opacity','1');
-   await expect(circle.locator('circle')).toHaveAttribute('fill','#1a1a1a');
+   await expect(circle.locator('circle')).toHaveCSS('fill', /url\(.*#technology-surface/);
+   const stops = page.locator('#technology-surface stop');
+   await expect(stops.first()).toHaveCSS('stop-color', colorScheme === 'dark' ? 'rgb(48, 48, 52)' : 'rgb(37, 37, 40)');
+   await expect(stops.last()).toHaveCSS('stop-color', colorScheme === 'dark' ? 'rgb(37, 37, 39)' : 'rgb(29, 29, 31)');
    await expect(circle.locator('.tech-icon')).toHaveCSS('filter','none');
    const knob=await page.locator('.cord-handle').boundingBox();
    const cv=await page.locator('.route[href="/cv/"] .tab-idle').evaluate(el=>{
@@ -110,7 +113,7 @@ test('quiet circles, circular focus and raised theme handle stay clear in both t
    await circle.scrollIntoViewIfNeeded();await circle.focus();await page.keyboard.press('Enter');
    await expect(circle).toHaveAttribute('aria-pressed','true');
    await expect(circle).toHaveCSS('outline-style','none');
-   await expect(circle.locator('.name-text')).toHaveCSS('fill','rgb(255, 255, 255)');
+   await expect(circle.locator('.name-text')).toHaveCSS('fill','rgb(244, 244, 245)');
    await page.screenshot({path:`qa/quiet-${colorScheme}-${width}-expanded.png`});
    await page.keyboard.press('Escape');
   }

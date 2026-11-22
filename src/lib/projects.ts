@@ -203,7 +203,7 @@ export const projects: Project[] = [
 		category: 'Hardware & home automation',
 		year: 'September 2021',
 		description: 'Motorized blinds for my college apartment, controlled through Apple HomeKit.',
-		image: '/assets/projects/field-notes/sunrise-spool.webp',
+		image: '/assets/projects/sunrise-hardware.png',
 		role: 'Personal hardware project',
 		tools: ['ESP32', 'HomeSpan', 'HomeKit'],
 		links: [

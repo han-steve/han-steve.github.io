@@ -157,7 +157,7 @@
 		<p class="header-summary">
 			<span class="summary-lead light">I build</span>
 			<span class="summary-detail">AI infrastructure<br />
-				<span class="light">for</span> agents<span class="light">,</span> training<span class="light">,<br />and</span> production inference<span class="light">.</span>
+				<span class="light">for</span> agents<span class="light">,</span> distributed training<span class="light">,<br />and</span> production inference<span class="light">.</span>
 				<button class="replay-button" onclick={replayEntrance} aria-label="Replay entrance animation" title="Replay entrance animation">
 					<svg width="15" height="15" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4" aria-hidden="true">
 						<path d="M21 18l10 6-10 6z" stroke-linejoin="round" /><path d="M11 37a18 18 0 1 0 0-26l-5 6M6 9v8h8" stroke-linecap="round" stroke-linejoin="round" />

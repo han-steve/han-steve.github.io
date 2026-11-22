@@ -90,7 +90,8 @@ test('hackathon entries label their Devpost links and keep the main filters focu
 	const archive = page.getByRole('region', { name: 'Hackathons' });
 	await expect(archive.getByRole('link', { name: /Devpost/ })).toHaveCount(4);
 	for(const [title,slug] of [['Swiper Go Swiping','swipergoswiping'],['EquiTeach','equiteach'],['Haven','haven-vjxtpg'],['Rentech','rentech']]) {
-		await expect(page.locator('.hackathon-entry').filter({has:page.getByRole('heading',{name:new RegExp(title)})})).toHaveAttribute('href',`https://devpost.com/software/${slug}`);
+		const entry = archive.getByRole('article').filter({has: page.getByRole('heading',{name:new RegExp(title)})});
+		await expect(entry.getByRole('link', {name: `View submission on Devpost — ${title}`, exact: true})).toHaveAttribute('href',`https://devpost.com/software/${slug}`);
 	}
 	await page.getByRole('button',{name:'Robotics & ML',exact:true}).click();
 	await expect(page.locator('.project-row')).toHaveCount(2);
