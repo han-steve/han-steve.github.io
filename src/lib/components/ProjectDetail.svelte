@@ -77,14 +77,17 @@
 		<div class="case-body">
 			{#each project.sections as section}
 				<div class="project-block">
-					{#if section.title}<h2>{section.title}</h2>{/if}
-					{#if section.body}<p>{section.body}</p>{/if}
+					{#if section.points}
+						<ul class="project-points">
+							{#each section.points as point}<li>{point}</li>{/each}
+						</ul>
+					{/if}
 					{#if section.features}
-						<dl class="feature-list">
+						<ul class="feature-list project-points">
 							{#each section.features as feature}
-								<div>
-									<dt>{feature.name}</dt>
-									<dd>
+								<li>
+									<strong>{feature.name}</strong>
+									<div>
 										{feature.detail}
 										{#if feature.demos}
 											<div class="feature-demos">
@@ -96,10 +99,10 @@
 												{/each}
 											</div>
 										{/if}
-									</dd>
-								</div>
+									</div>
+								</li>
 							{/each}
-						</dl>
+						</ul>
 					{/if}
 					{#if section.figure}
 						{@const figure = section.figure}
@@ -133,10 +136,17 @@
 </article>
 
 <style>
+	.project-points {
+		margin: 0;
+		padding-inline-start: 1.2em;
+		list-style: disc;
+		line-height: 1.65;
+	}
+	.project-points li + li { margin-top: .55rem; }
 	.feature-list { margin: 0; }
-	.feature-list > div + div { margin-top: 1rem; }
-	.feature-list dt { font-weight: 600; }
-	.feature-list dd { margin: .15rem 0 0; line-height: 1.65; }
+	.feature-list > li + li { margin-top: 1rem; }
+	.feature-list strong { font-weight: 600; }
+	.feature-list li > div { margin: .15rem 0 0; line-height: 1.65; }
 	.feature-demos { display: flex; flex-wrap: wrap; align-items: start; gap: .75rem; margin-top: .75rem; }
 	.feature-demos figure { flex: 0 1 180px; max-width: 100%; margin: 0; }
 	.feature-demos img { display: block; width: 100%; height: auto; border-radius: .5rem; }

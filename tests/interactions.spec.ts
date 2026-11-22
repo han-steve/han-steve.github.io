@@ -174,6 +174,7 @@ test('native preview respects reduced motion and Save-Data', async ({ page }) =>
 });
 
 test('native preview actually plays, pauses and pauses when offscreen', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 600 });
 	await page.emulateMedia({ reducedMotion: 'no-preference' });
 	await page.goto('/projects/trill/');
 	await page.locator('video').scrollIntoViewIfNeeded();
@@ -185,6 +186,7 @@ test('native preview actually plays, pauses and pauses when offscreen', async ({
 	await page.getByRole('button', { name: 'Play video preview' }).click();
 	await expect.poll(() => page.locator('video').evaluate((v) => (v as HTMLVideoElement).paused)).toBe(false);
 	await page.locator('.sheet-scroll').evaluate(el => { el.scrollTop = el.scrollHeight; });
+	await expect(page.locator('video')).not.toBeInViewport();
 	await expect.poll(() => page.locator('video').evaluate((v) => (v as HTMLVideoElement).paused)).toBe(true);
 });
 
@@ -260,8 +262,7 @@ test('homepage additions follow the original bio and bubbles', async ({ page }) 
 	const research = paragraphs.nth(4);
 	await expect(education).toHaveText('I graduated from the University of Texas at Austin with a Masters and a Bachelors in Computer Science, a Bachelors in Math, and a certificate in Spanish.');
 	await expect(research).toContainText('For my master’s, I worked on TRILL at the Robot Perception and Learning Lab (RPL).');
-	await expect(research).toContainText('I built the VR interface we used to record demonstrations for imitation learning.');
-	await expect(research).toContainText('put a tool back in its box');
+	await expect(research).toContainText('We used imitation learning to teach a humanoid robot household tasks');
 	await expect(research.getByRole('link', { name: 'TRILL', exact: true })).toHaveAttribute('href', '/projects/trill/');
 	await expect(education.locator('xpath=preceding-sibling::*[1]').locator('.bubble-chart')).toHaveCount(1);
 	await expect(education.locator('xpath=preceding-sibling::section')).toHaveCount(0);

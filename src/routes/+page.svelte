@@ -211,7 +211,7 @@
 </p>
 <p>
 	For my master’s, I worked on <a class="link" href="/projects/trill/">TRILL</a> at the Robot Perception and Learning Lab (RPL).
-	I built the VR interface we used to record demonstrations for imitation learning. We taught the robot to take the cap off a spray can and put a tool back in its box.
+	We used imitation learning to teach a humanoid robot household tasks, including putting a tool back in its box.
 </p>
 
 <Experience />

@@ -94,7 +94,11 @@ test('route focus never outlines the page while keyboard controls retain a visib
 test('mobile handle remains usable when scrolled and cancelled pulls settle the sheet and backdrop together', async ({ browser }) => {
 	const { context, page, touch, scrollY } = await mobileSheet(browser);
 	try {
-		await page.locator('.sheet-scroll').evaluate(element => { element.scrollTop = 400; });
+		const scrollOffset = await page.locator('.sheet-scroll').evaluate(element => {
+			element.scrollTop = 400;
+			return element.scrollTop;
+		});
+		expect(scrollOffset).toBeGreaterThan(0);
 		const initial = (await page.locator('.project-sheet').boundingBox())!;
 		const restingVeil = await backdropAlpha(page);
 		await touch('touchStart', 10);
@@ -103,7 +107,7 @@ test('mobile handle remains usable when scrolled and cancelled pulls settle the 
 		expect(pulled.y).toBeGreaterThan(initial.y + 30);
 		expect(pulled.width).toBeLessThan(initial.width - 10);
 		expect(await backdropAlpha(page)).toBeLessThan(restingVeil - .02);
-		expect(await page.locator('.sheet-scroll').evaluate(element => element.scrollTop)).toBe(400);
+		expect(await page.locator('.sheet-scroll').evaluate(element => element.scrollTop)).toBe(scrollOffset);
 		await page.screenshot({ path: 'qa/refinement-mobile-handle-pulled.png' });
 		await touch('touchCancel');
 		await expect(page.getByRole('dialog')).toBeVisible();
@@ -111,7 +115,7 @@ test('mobile handle remains usable when scrolled and cancelled pulls settle the 
 		expect(await backdropAlpha(page)).toBeLessThan(restingVeil - .005);
 		await expect(page.locator('.project-sheet')).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)');
 		await expect.poll(() => backdropAlpha(page)).toBeCloseTo(restingVeil, 2);
-		expect(await page.locator('.sheet-scroll').evaluate(element => element.scrollTop)).toBe(400);
+		expect(await page.locator('.sheet-scroll').evaluate(element => element.scrollTop)).toBe(scrollOffset);
 		await touch('touchStart', 10);
 		for (const y of [60, 120, 190, 260]) await touch('touchMove', y);
 		await touch('touchEnd');

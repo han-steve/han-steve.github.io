@@ -2,7 +2,7 @@
 	import CompanyMark from '$lib/components/CompanyMark.svelte';
 	import { experienceSurface } from '$lib/sheet-navigation';
 	import Seo from '$lib/components/Seo.svelte';
-	import { talks } from '$lib/projects';
+	import { talks, thesisUrl } from '$lib/projects';
 	import LinkPreview from '$lib/components/LinkPreview.svelte';
 </script>
 
@@ -142,11 +142,11 @@
 			<p>B.S. and M.S. in Computer Science<br />B.S.A. in Mathematics<br />Business Spanish Certificate</p>
 			<p>Undergraduate GPA 3.99</p>
 			<p>
-				During my master’s, I worked on TRILL at the Robot Perception and Learning Lab (RPL). I built the VR system we
-				used to record demonstrations for training a humanoid robot to walk and handle objects.
-				My thesis was <a class="text-link" href="/projects/trill"
-					>VR Teleoperation Interface for Learning Loco-manipulation of Humanoid Robots</a
-				>.
+				Built the VR teleoperation system for <a class="text-link" href="/projects/trill/">TRILL</a>
+				at the Robot Perception and Learning Lab during master’s research.
+			</p>
+			<p>
+				Master’s thesis · <a class="text-link" href={thesisUrl}>VR Teleoperation Interface for Learning Loco-manipulation of Humanoid Robots</a>
 			</p>
 		</div>
 	</section>

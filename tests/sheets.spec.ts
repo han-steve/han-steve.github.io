@@ -224,7 +224,7 @@ test('mobile pull-down tracks the finger, cancels short pulls and dismisses to t
 
 test('the sheet toolbar shields scrolled text and clears when the cover returns', async ({ page }) => {
 	await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'light' });
-	await page.goto('/projects/trill/');
+	await page.goto('/projects/self-steering-scooter/');
 	const sheet = page.locator('.project-sheet');
 	const scroll = page.locator('.sheet-scroll');
 	const grip = page.locator('.sheet-handle span');

@@ -7,7 +7,7 @@ for (const device of [
 	test.describe(device.name, () => {
 		test.use({ viewport: device.viewport, hasTouch: device.touch, isMobile: device.touch });
 
-		test('the CV thesis link opens and closes TRILL without a transition', async ({ page }) => {
+		test('the CV project link opens and closes TRILL without a transition', async ({ page }) => {
 			await page.emulateMedia({ reducedMotion: 'no-preference' });
 			await page.addInitScript(() => {
 				const motion = { snapshots: 0, entrances: 0 };
@@ -29,26 +29,28 @@ for (const device of [
 			await expect.poll(() => page.evaluate(() => localStorage.getItem('skipAnimation'))).toBe('TRUE');
 
 			const thesis = page.getByRole('link', { name: 'VR Teleoperation Interface for Learning Loco-manipulation of Humanoid Robots' });
+			await expect(thesis).toHaveAttribute('href', 'https://doi.org/10.26153/tsw/52390');
+			const project = page.getByRole('link', { name: 'TRILL', exact: true });
 			const dialog = page.getByRole('dialog', { name: 'TRILL', exact: true });
-			await thesis.scrollIntoViewIfNeeded();
+			await project.scrollIntoViewIfNeeded();
 			const scroll = await page.evaluate(() => scrollY);
 			await page.getByRole('main').evaluate(el => el.setAttribute('data-cv-before-open', 'true'));
-			if (device.touch) await thesis.tap();
-			else await thesis.press('Enter');
+			if (device.touch) await project.tap();
+			else await project.press('Enter');
 			await expect(page).toHaveURL(/\/projects\/trill\/$/);
 			await expect(dialog).toBeVisible();
 			await expect(page.locator('main')).toHaveAttribute('data-cv-before-open', 'true');
 
 			await dialog.getByRole('link', { name: 'Close project' }).click();
 			await expect(page).toHaveURL(/\/cv\/$/);
-			await expect(thesis).toBeFocused();
+			await expect(project).toBeFocused();
 			expect(await page.evaluate(() => scrollY)).toBeCloseTo(scroll, 0);
 
 			await page.goForward();
 			await expect(dialog).toBeVisible();
 			await page.goBack();
 			await expect(dialog).toHaveCount(0);
-			await expect(thesis).toBeFocused();
+			await expect(project).toBeFocused();
 			expect(await page.evaluate(() => Reflect.get(window, 'sheetMotionForTest'))).toEqual({
 				snapshots: 0, entrances: 0
 			});
