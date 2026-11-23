@@ -33,8 +33,8 @@
 				<p>Contributed to agent infrastructure for Build, Roblox’s tool for creating games from text prompts.</p>
 				<h4>Senior Software Engineer · ML Platform</h4>
 				<span class="cv-date">August 2025 — June 2026</span>
-				<p>Built the RDMA-enabled training environment where the 3D foundation model team logged over 50,000 training hours on 96 H200 GPUs.</p>
-				<p>Integrated Coder with Ray to build a cloud IDE. Researchers could test code changes in seconds instead of waiting over ten minutes for a rebuild. Used Seekable OCI (SOCI) to start new workspaces six times faster.</p>
+				<p>Built an RDMA-enabled training environment for the 3D foundation model team.</p>
+				<p>Integrated Coder with Ray so researchers could test code changes without rebuilding a container image. Used Seekable OCI (SOCI) to speed up workspace startup.</p>
 				<h4>Software Engineer · ML Platform</h4>
 				<span class="cv-date">September 2023 — August 2025</span>
 				<p>Helped build active-active GPU inference clusters from scratch across multiple regions. Designed load balancing and automatic failover with AWS Application Load Balancers. Automated cluster setup with Terraform and Kubernetes.</p>
@@ -83,7 +83,7 @@
 						title="How Roblox Uses AI to Moderate Content on a Massive Scale"
 						image="/assets/publications/moderation.webp"
 						source="Roblox" date="July 2025"
-						description="Helped build the GPU clusters that served Roblox’s safety models. Wrote the Terraform and Kubernetes code that brought each cluster online in about 30 minutes."
+						description="Helped build the GPU clusters that served Roblox’s safety models. Automated cluster setup with Terraform and Kubernetes."
 					/>
 				</li>
 				<li>
