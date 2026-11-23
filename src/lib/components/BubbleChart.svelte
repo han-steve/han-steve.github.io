@@ -22,7 +22,7 @@ const chartId = $props.id();
 // Scale factor for bubble sizes based on proficiency
 const BUBBLE_SIZE_SCALE = 10;
 const MOBILE_BREAKPOINT = 600;
-const MOBILE_CHART_HEIGHT = 620;
+const MOBILE_CHART_HEIGHT = 550;
 
 interface Node extends Technology, d3.SimulationNodeDatum {
     id: number;
@@ -57,7 +57,7 @@ let isDragging = false;
 let headerAnimationDone = $state(false);
 const paddingX = 10;
 const paddingY = 50;
-const collisionRadius = (node: Node) => node.r + (width < MOBILE_BREAKPOINT ? 4 : 2);
+const collisionRadius = (node: Node) => node.r + 2;
 
 // Subscribe to the header animation state
 const unsubscribe = headerAnimationComplete.subscribe(value => {
@@ -125,19 +125,19 @@ function getClusterCenters() {
                 case 0: // Top center
                     acc[type] = {
                         x: width / 2,
-                        y: height * 0.34
+                        y: height * 0.4
                     };
                     break;
                 case 1: // Bottom left
                     acc[type] = {
                         x: width / 2 - horizontalSpacing,
-                        y: height * 0.62
+                        y: height * 0.57
                     };
                     break;
                 case 2: // Bottom right
                     acc[type] = {
                         x: width / 2 + horizontalSpacing,
-                        y: height * 0.62
+                        y: height * 0.57
                     };
                     break;
             }
@@ -266,8 +266,6 @@ function initializeSimulation() {
         .style('opacity', '0')
         .attr('transform', d => `translate(${d.x},${d.y})`)
         .call(d3.drag<SVGGElement, Node>()
-            // Taps still open a bubble. A swipe over one should scroll the page.
-            .touchable(() => false)
             .on('start', (event, d) => {
                 isDragging = false;
                 if (!event.active) simulation.alphaTarget(0.2).restart();

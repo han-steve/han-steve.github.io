@@ -297,7 +297,7 @@ test('original bubbles stay centered across full-page capture and resize, and to
     await page.screenshot({ path: 'qa/restored-bubbles-mobile.png', fullPage: true });
 });
 
-test('a swipe over the mobile bubbles scrolls the page and a tap opens the label', async ({ browser }) => {
+test('mobile bubbles drag and open on tap while swipes from the gaps scroll', async ({ browser }) => {
 	const context = await browser.newContext({
 		viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce',
 		baseURL: process.env.PREVIEW_URL || 'http://127.0.0.1:4178'
@@ -307,7 +307,7 @@ test('a swipe over the mobile bubbles scrolls the page and a tap opens the label
 		await page.goto('/');
 		const chart = page.locator('.bubble-chart');
 		await chart.evaluate(element => element.scrollIntoView({ block: 'center' }));
-		await expect(chart.locator('svg')).toHaveCSS('height', '620px');
+		await expect(chart.locator('svg')).toHaveCSS('height', '550px');
 		const bubble = chart.getByRole('button', { name: 'Terraform', exact: true });
 		await expect(bubble).toHaveCSS('opacity', '1');
 		const face = bubble.locator('.bubble-surface');
@@ -317,12 +317,24 @@ test('a swipe over the mobile bubbles scrolls the page and a tap opens the label
 		const startScroll = await page.evaluate(() => scrollY);
 		const cdp = await context.newCDPSession(page);
 		await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+		for (const offset of [18, 36, 58]) {
+			await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x - offset, y: y + offset / 2 }] });
+		}
+		await expect.poll(async () => (await face.boundingBox())!.x).toBeLessThan(initial.x - 40);
+		expect(await page.evaluate(() => scrollY)).toBe(startScroll);
+		await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+		await expect(bubble).toHaveAttribute('aria-pressed', 'false');
+
+		// Start the next gesture in the empty strip outside the bubble bounds.
+		const chartBox = (await chart.boundingBox())!;
+		const gap = { x: 3, y: chartBox.y + chartBox.height / 2 };
+		await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [gap] });
 		for (const offset of [24, 52, 90, 132]) {
-			await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: y - offset }] });
+			await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: gap.x, y: gap.y - offset }] });
 		}
 		await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
 		await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(startScroll + 50);
-		await expect(bubble).toHaveAttribute('aria-pressed', 'false');
+
 		// A tap during native scroll momentum stops scrolling. Check tapping at rest.
 		await page.reload();
 		await chart.evaluate(element => element.scrollIntoView({ block: 'center' }));
