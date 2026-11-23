@@ -131,8 +131,8 @@
 		<div class="cv-entry">
 			<p>Go, Python, JavaScript, Java, C++, Rust, HTML, CSS</p>
 			<p>Ray, React, PyTorch, Next.js</p>
-			<p>Kubernetes, AWS, Kubeflow, Prometheus, Istio, Docker</p>
-			<p>English, Chinese, and Spanish</p>
+			<p>Kubernetes, AWS, Terraform, Kubeflow, Prometheus, Istio, Docker</p>
+			<p>English, Chinese, and Spanish (intermediate)</p>
 		</div>
 	</section>
 	<p class="small muted" style="margin-bottom:60px">

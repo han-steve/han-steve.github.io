@@ -276,7 +276,7 @@ test('original bubbles stay centered across full-page capture and resize, and to
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
     await page.locator('.bubble-chart').scrollIntoViewIfNeeded();
-    await expect(page.locator('.node')).toHaveCount(22);
+    await expect(page.locator('.node')).toHaveCount(23);
     const centers = () => page.locator('.node').evaluateAll(nodes => nodes.map(node => {
         const box = node.getBoundingClientRect();
         return box.x + box.width / 2;

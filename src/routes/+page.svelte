@@ -33,6 +33,13 @@
 			padding: 0.4
 		},
 		{
+			name: 'Terraform',
+			svg: '/assets/icons/terraform.svg',
+			proficiency: 4 as const,
+			description: 'Used Terraform to bootstrap GPU inference clusters and Kubernetes clusters for our Slack agent at Roblox.',
+			type: 'infra'
+		},
+		{
 			name: 'Prometheus',
 			svg: '/assets/icons/prometheus.svg',
 			proficiency: 2 as const,

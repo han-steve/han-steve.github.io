@@ -23,7 +23,7 @@ for (const scheme of ['light', 'dark'] as const) {
 			expect(response?.status(), path).toBe(200);
 			await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
 			if (path === '/') {
-				await expect(page.locator('.tech-icon')).toHaveCount(22);
+				await expect(page.locator('.tech-icon')).toHaveCount(23);
 				const missing = await page.locator('.tech-icon').evaluateAll(async icons => {
 					const results = await Promise.all(icons.map(async icon => {
 						const src = (icon as SVGImageElement).href.baseVal;
