@@ -34,7 +34,7 @@ export interface Project {
 	}[];
 }
 
-export const thesisUrl = 'https://doi.org/10.26153/tsw/52390';
+export const thesisUrl = '/assets/publications/han-vr-teleoperation-thesis.pdf';
 
 export const talks = [
 	{
@@ -67,11 +67,7 @@ export const projects: Project[] = [
 		tools: ['Imitation learning', 'VR teleoperation', 'Robotics'],
 		links: [
 			{ label: 'TRILL research site', url: 'https://ut-austin-rpl.github.io/TRILL/' },
-			{
-				label: 'Master’s thesis · UT Austin',
-				url: thesisUrl
-			},
-			{ label: 'Read thesis (PDF)', url: '/assets/publications/han-vr-teleoperation-thesis.pdf' }
+			{ label: 'Master’s thesis (PDF)', url: thesisUrl }
 		],
 		sections: [
 			{
@@ -96,7 +92,7 @@ export const projects: Project[] = [
 		title: 'VoxCraft VR',
 		category: 'Graphics & interaction',
 		year: 'May 2021',
-		description: 'A Minecraft-style game for the Quest 2, made with Grace Liu for our computer graphics final at UT Austin.',
+		description: 'A Minecraft-style VR game made with Grace Liu for our computer graphics final at UT Austin.',
 		image: '/assets/projects/voxcraft.png',
 		role: 'UT Austin computer graphics final, with Grace Liu',
 		tools: ['A-Frame', 'JavaScript', 'WebXR'],
@@ -107,7 +103,7 @@ export const projects: Project[] = [
 		sections: [
 			{
 				paragraphs: [
-					'Grace Liu and I wanted to see how Minecraft would play on the Quest 2. We made VoxCraft for our computer graphics final at UT Austin using A-Frame and WebXR.'
+					'Grace Liu and I wanted to see how Minecraft would play in VR. We made VoxCraft for our computer graphics final at UT Austin using A-Frame and WebXR.'
 				],
 				features: [
 					{

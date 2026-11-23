@@ -22,7 +22,7 @@ const chartId = $props.id();
 // Scale factor for bubble sizes based on proficiency
 const BUBBLE_SIZE_SCALE = 10;
 const MOBILE_BREAKPOINT = 600;
-const MOBILE_CHART_HEIGHT = 680;
+const MOBILE_CHART_HEIGHT = 620;
 
 interface Node extends Technology, d3.SimulationNodeDatum {
     id: number;
@@ -57,7 +57,7 @@ let isDragging = false;
 let headerAnimationDone = $state(false);
 const paddingX = 10;
 const paddingY = 50;
-const collisionRadius = (node: Node) => node.r + (width < MOBILE_BREAKPOINT ? 6 : 2);
+const collisionRadius = (node: Node) => node.r + (width < MOBILE_BREAKPOINT ? 4 : 2);
 
 // Subscribe to the header animation state
 const unsubscribe = headerAnimationComplete.subscribe(value => {
@@ -125,19 +125,19 @@ function getClusterCenters() {
                 case 0: // Top center
                     acc[type] = {
                         x: width / 2,
-                        y: height * 0.29
+                        y: height * 0.34
                     };
                     break;
                 case 1: // Bottom left
                     acc[type] = {
                         x: width / 2 - horizontalSpacing,
-                        y: height * 0.67
+                        y: height * 0.62
                     };
                     break;
                 case 2: // Bottom right
                     acc[type] = {
                         x: width / 2 + horizontalSpacing,
-                        y: height * 0.67
+                        y: height * 0.62
                     };
                     break;
             }

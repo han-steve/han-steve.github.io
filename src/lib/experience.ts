@@ -28,13 +28,14 @@ export const experience: ExperienceItem[] = [
 				body: [
 					'Built the Slack integration and Kubernetes infrastructure for an internal agent platform used by about 1,000 people a month. The agent gets tagged about 2,000 times a day in Slack.',
 					'Built a Kubernetes sandbox provider with agent-sandbox and gVisor. Wrote Temporal workflows to release idle sandboxes and reconnect each Slack session to its files in cloud storage.',
-					'Training questions in Slack interrupted our team throughout the day. I built a bot to help researchers debug their training jobs. It’s handled over 6,000 messages.'
+					'Questions from users of our ML Platform used to interrupt our team throughout the day. I built a Slack bot to help researchers debug their training jobs. It’s handled over 6,000 messages.',
+					'Contributed to agent infrastructure for Build, Roblox’s tool for creating games from text prompts.'
 				]
 			},
 			{
 				title: 'GPU inference clusters',
 				body: [
-					'My teammates and I built Roblox’s GPU inference clusters from scratch. The clusters serve ML workloads, including safety models, in an active-active setup across multiple regions. I wrote the Terraform and Kubernetes code that brought a new cluster online in about 30 minutes.',
+					'My teammates and I built GPU inference clusters from scratch at Roblox. The clusters ran active-active across regions and served workloads including safety models. I wrote the Terraform and Kubernetes code that brought a new cluster online in about 30 minutes.',
 					'I designed the load balancing and automatic failover. The AWS Application Load Balancer sent requests directly to NGINX pods, removing a network hop. I fixed downtime during NGINX redeploys and spread replicas across nodes so we could upgrade a cluster while it served traffic.',
 					'Cut the time to add serving capacity from eight minutes to three by using local NVMe storage.',
 					'The new clusters ran larger safety models at half the cost. One handled 370,000 requests per second at peak.'
@@ -53,8 +54,9 @@ export const experience: ExperienceItem[] = [
 				]
 			},
 			{
-				title: 'Batch inference and training on Ray',
+				title: 'ML Platform',
 				body: [
+					'Maintained Kubeflow, Istio, the LLM Batch API, and production Kubernetes clusters with more than 3,000 nodes.',
 					'Adapted KubeRay to Roblox’s schedulers and built the Go job service and dashboard. The platform handled more than 100 jobs a day.',
 					'Built the on-premises training environment and enabled RDMA between nodes. Our 3D foundation model team processed petabytes of data with Ray and logged over 50,000 training hours on 96 H200 GPUs. I also enabled EFA on AWS.',
 					'Built a cloud IDE by integrating Coder with Ray. The workspace ran on the Ray head node, so researchers could keep their editor open while idle GPU workers scaled to zero.',

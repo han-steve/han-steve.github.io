@@ -30,6 +30,7 @@
 				<span class="cv-date">June 2026 — Present</span>
 				<p>Built the Slack integration and Kubernetes infrastructure for an internal agent platform used by about 1,000 people a month. The agent gets tagged about 2,000 times a day in Slack.</p>
 				<p>Built a Kubernetes sandbox provider with agent-sandbox and gVisor. Wrote Temporal workflows to release idle sandboxes and reconnect each Slack session to its files in cloud storage.</p>
+				<p>Contributed to agent infrastructure for Build, Roblox’s tool for creating games from text prompts.</p>
 				<h4>Senior Software Engineer · ML Platform</h4>
 				<span class="cv-date">August 2025 — June 2026</span>
 				<p>Built the RDMA-enabled training environment where the 3D foundation model team logged over 50,000 training hours on 96 H200 GPUs.</p>
@@ -37,6 +38,7 @@
 				<h4>Software Engineer · ML Platform</h4>
 				<span class="cv-date">September 2023 — August 2025</span>
 				<p>Helped build active-active GPU inference clusters from scratch across multiple regions. Designed load balancing and automatic failover with AWS Application Load Balancers. Automated cluster setup with Terraform and Kubernetes.</p>
+				<p>Maintained Kubeflow, Istio, the LLM Batch API, and production Kubernetes clusters with more than 3,000 nodes.</p>
 				<p>Built the Ray job platform on Kubernetes. Engineers submitted more than 10,000 Ray jobs in the second quarter of 2025.</p>
 			</div>
 			<div class="cv-entry">
@@ -81,7 +83,7 @@
 						title="How Roblox Uses AI to Moderate Content on a Massive Scale"
 						image="/assets/publications/moderation.webp"
 						source="Roblox" date="July 2025"
-						description="Helped build the GPU clusters that serve Roblox’s safety models. Wrote the Terraform and Kubernetes code that brought each cluster online in about 30 minutes."
+						description="Helped build the GPU clusters that served Roblox’s safety models. Wrote the Terraform and Kubernetes code that brought each cluster online in about 30 minutes."
 					/>
 				</li>
 				<li>
@@ -107,7 +109,7 @@
 				Built the VR interface for <a class="text-link" href="/projects/trill/">TRILL</a> during master’s research at the Robot Perception and Learning Lab. Used it to record demonstrations for teaching a humanoid robot household tasks.
 			</p>
 			<p>
-				Master’s thesis · <a class="text-link" href={thesisUrl}>VR Teleoperation Interface for Learning Loco-manipulation of Humanoid Robots</a>
+				Master’s thesis · <a class="text-link" href={thesisUrl}>VR Teleoperation Interface for Learning Loco-manipulation of Humanoid Robots</a> (PDF)
 			</p>
 		</div>
 	</section>

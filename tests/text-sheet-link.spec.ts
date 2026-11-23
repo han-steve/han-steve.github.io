@@ -7,7 +7,7 @@ for (const device of [
 	test.describe(device.name, () => {
 		test.use({ viewport: device.viewport, hasTouch: device.touch, isMobile: device.touch });
 
-		test('the CV project link opens and closes TRILL without a transition', async ({ page }) => {
+		test('the CV project link opens and closes TRILL without a transition', async ({ page, request }) => {
 			await page.emulateMedia({ reducedMotion: 'no-preference' });
 			await page.addInitScript(() => {
 				const motion = { snapshots: 0, entrances: 0 };
@@ -29,7 +29,11 @@ for (const device of [
 			await expect.poll(() => page.evaluate(() => localStorage.getItem('skipAnimation'))).toBe('TRUE');
 
 			const thesis = page.getByRole('link', { name: 'VR Teleoperation Interface for Learning Loco-manipulation of Humanoid Robots' });
-			await expect(thesis).toHaveAttribute('href', 'https://doi.org/10.26153/tsw/52390');
+			const thesisPath = '/assets/publications/han-vr-teleoperation-thesis.pdf';
+			await expect(thesis).toHaveAttribute('href', thesisPath);
+			const pdf = await request.head(thesisPath);
+			expect(pdf.ok()).toBe(true);
+			expect(pdf.headers()['content-type']).toContain('application/pdf');
 			const project = page.getByRole('link', { name: 'TRILL', exact: true });
 			const dialog = page.getByRole('dialog', { name: 'TRILL', exact: true });
 			await project.scrollIntoViewIfNeeded();
@@ -39,6 +43,7 @@ for (const device of [
 			else await project.press('Enter');
 			await expect(page).toHaveURL(/\/projects\/trill\/$/);
 			await expect(dialog).toBeVisible();
+			await expect(dialog.getByRole('link', { name: 'Master’s thesis (PDF)', exact: true })).toHaveAttribute('href', thesisPath);
 			await expect(page.locator('main')).toHaveAttribute('data-cv-before-open', 'true');
 
 			await dialog.getByRole('link', { name: 'Close project' }).click();

@@ -282,8 +282,8 @@ test('direct project reload closes to the archive and Sunrise shows the circuit 
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roblox');
 	await expect(page.getByRole('link', { name: /Ray Summit/ })).toHaveCount(2);
 	await expect(page.locator('.job section h2').first()).toHaveText('Agent infrastructure');
-	const ray = page.locator('section').filter({ has: page.getByRole('heading', { name: 'Batch inference and training on Ray' }) });
+	const platform = page.locator('section').filter({ has: page.getByRole('heading', { name: 'ML Platform', exact: true }) });
 	const safety = page.locator('section').filter({ has: page.getByRole('heading', { name: 'GPU inference clusters' }) });
-	await expect(ray.getByRole('link', { name: 'Running AI Inference at Scale in the Hybrid Cloud' })).toHaveAttribute('href', /about\.roblox\.com\/newsroom\/2024\/09\//);
+	await expect(platform.getByRole('link', { name: 'Running AI Inference at Scale in the Hybrid Cloud' })).toHaveAttribute('href', /about\.roblox\.com\/newsroom\/2024\/09\//);
 	await expect(safety.locator('a[href^="https://about.roblox.com/newsroom/"]')).toHaveCount(2);
 });

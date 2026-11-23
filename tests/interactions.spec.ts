@@ -307,7 +307,7 @@ test('a swipe over the mobile bubbles scrolls the page and a tap opens the label
 		await page.goto('/');
 		const chart = page.locator('.bubble-chart');
 		await chart.evaluate(element => element.scrollIntoView({ block: 'center' }));
-		await expect(chart.locator('svg')).toHaveCSS('height', '680px');
+		await expect(chart.locator('svg')).toHaveCSS('height', '620px');
 		const bubble = chart.getByRole('button', { name: 'Terraform', exact: true });
 		await expect(bubble).toHaveCSS('opacity', '1');
 		const face = bubble.locator('.bubble-surface');
