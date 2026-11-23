@@ -10,7 +10,7 @@ export interface Project {
 	tools: string[];
 	links: { label: string; url: string }[];
 	sections: {
-		points?: string[];
+		paragraphs?: string[];
 		features?: {
 			name: string;
 			detail: string;
@@ -75,10 +75,10 @@ export const projects: Project[] = [
 		],
 		sections: [
 			{
-				points: [
-					'Built the VR interface for TRILL during master’s research at UT Austin. We used imitation learning to teach a humanoid robot to walk and handle objects.',
-					'Connected a Quest 2 to MuJoCo and the physical robot. In the ramen demo, an operator guides both hands using the robot’s stereo camera feed.',
-					'Co-authored the TRILL paper. After training on 250 demonstrations per task, the robot removed a spray cap in 9 of 10 trials and put a tool back in its box in 8 of 10.'
+				paragraphs: [
+					'For my master’s at UT Austin’s Robot Perception and Learning Lab, I worked on teaching a humanoid robot to do household tasks by imitation. I built the VR interface our team used to demonstrate those tasks and record the training data.',
+					'The Quest 2 showed the view from the robot’s stereo cameras. Moving either hand controller moved the corresponding robot hand. We used the same controls in MuJoCo and on the physical robot.',
+					'We collected 250 demonstrations per task. In tests on the physical robot, the trained policy took the cap off a spray can in nine of ten trials and put a tool back in its box in eight of ten.'
 				]
 			}
 		],
@@ -106,21 +106,24 @@ export const projects: Project[] = [
 		],
 		sections: [
 			{
+				paragraphs: [
+					'Grace Liu and I wanted to see how Minecraft would play on the Quest 2. We made VoxCraft for our computer graphics final at UT Austin using A-Frame and WebXR.'
+				],
 				features: [
 					{
 						name: 'Terrain',
-						detail: 'Rendered only the exposed faces of each 32 × 32 × 32 chunk. Kept a 5 × 5 grid around the player and saved edits as chunks left the screen.',
+						detail: 'The renderer draws only the exposed faces in each 32 × 32 × 32 chunk. It keeps a 5 × 5 grid of chunks around the player. If you leave an area and come back, your edits are still there.',
 						demos: [{ gif: '/assets/projects/voxcraft/voxel-mesh.gif', label: 'Voxel mesh', alt: 'The voxel mesh around the player in the block world.', size: 180 }]
 					},
-					{ name: 'Terrain generation', detail: 'Generated hills with Perlin noise, selected block textures by elevation, and scattered trees and lanterns across the map.' },
+					{ name: 'Terrain generation', detail: 'We used Perlin noise to generate hills that continue across chunk boundaries. The terrain height determines which blocks fill each column.' },
 					{
 						name: 'Movement',
-						detail: 'Added flight in creative mode and automatic jumps over one-block ledges in survival mode. Press B to switch modes.',
+						detail: 'Press B to switch between creative and survival modes. In creative mode you can fly. In survival mode you walk, and your character steps up one-block ledges automatically.',
 						demos: [{ gif: '/assets/projects/voxcraft/walking.gif', label: 'Walking', alt: 'First-person view of the player walking through the terrain.', size: 180 }]
 					},
 					{
 						name: 'Building and mining',
-						detail: 'Mapped building to the trigger and mining to repeated swings at the same block. The cursor hugs the selected face. Equipping the pickaxe from the inventory makes mining almost instant.',
+						detail: 'Point at a face and pull the trigger to place a block against it. Swing the controller a few times to mine a block, or equip the pickaxe from the inventory to mine it almost instantly.',
 						demos: [
 							{ gif: '/assets/projects/voxcraft/building.gif', label: 'Building', alt: 'The player places blocks using the VR controller.', size: 180 },
 							{ gif: '/assets/projects/voxcraft/pickaxe.gif', label: 'Pickaxe', alt: 'The player selects and uses the pickaxe.', size: 200 },
@@ -153,9 +156,9 @@ export const projects: Project[] = [
 		],
 		sections: [
 			{
-				points: [
-					'Compared Proximal Policy Optimization (PPO) with a deep Q-network (DQN) to teach a riderless scooter to balance in MuJoCo. Both earned one point per step upright. PPO learned to balance in fewer steps in my runs, so I used it for navigation.',
-					'Held the scooter at 12 mph and gave the policy control of the handlebars. Thirty times a second it read the scooter’s lean, how fast it was tipping, and the steering angle, then chose one of five steering adjustments.'
+				paragraphs: [
+					'Could a rental scooter steer itself back to a charger? I modeled a riderless scooter in MuJoCo and trained it to balance at about 12 mph. I tried two reinforcement learning algorithms on the same task, Proximal Policy Optimization (PPO) and a deep Q-network (DQN).',
+					'The controller adjusted the handlebars 30 times a second using the scooter’s tilt, how fast it was tipping, and the steering angle. It earned one point for each step the scooter stayed upright. PPO learned to balance in fewer steps in my runs, so I used it for steering toward a target.'
 				],
 				figure: {
 					image: '/assets/projects/scooter/balance.jpg',
@@ -170,8 +173,8 @@ export const projects: Project[] = [
 				}
 			},
 			{
-				points: [
-					'Added the signed angle to the target as an input and penalized heading error. Trained the scooter on a 90-degree turn, then a U-turn, before testing it from new starting directions.'
+				paragraphs: [
+					'To steer toward a target, the controller also needed to know how far left or right to turn. I added that angle to its inputs and penalized it for pointing away from the target. It learned a 90-degree turn first, then a U-turn. After that I trained it from random starting directions.'
 				],
 				figure: {
 					image: '/assets/projects/scooter/trajectories.webp',
@@ -182,9 +185,8 @@ export const projects: Project[] = [
 				}
 			},
 			{
-				points: [
-					'Tested the same policy with random starts and targets 50 to 100 meters away. It reached the target in all 200 trials.',
-					'Chained waypoints without resetting the simulation. Each time the scooter reached its destination, it kept riding toward the next one.'
+				paragraphs: [
+					'The same controller reached all 200 targets in a second test with random starting positions and goals 50 to 100 meters away. For the last run, I gave the scooter a new waypoint each time it reached one. It rode the whole route without stopping.'
 				],
 				figure: {
 					image: '/assets/projects/scooter/waypoints.webp',
@@ -218,8 +220,9 @@ export const projects: Project[] = [
 		],
 		sections: [
 			{
-				points: [
-					'Replaced a stalled ibuprofen-bottle spool and shoelace with a bottle cap and thread from a sewing kit. With the smaller spool, the motor could lift the blind.'
+				paragraphs: [
+					'I wanted to wake up to sunlight in my college apartment. I fitted motors to the blinds on both windows so I could open them in the morning with Apple Home.',
+					'My first spool was an empty ibuprofen bottle with a shoelace wound around it. The motor stalled. A bottle cap and some thread from the sewing kit my mom insisted I take to college worked better. The smaller spool gave the motor enough pull to lift the blind, but the thread kept slipping off, so I designed a spool in Fusion 360.'
 				],
 				figure: {
 					image: '/assets/projects/field-notes/sunrise-spool.webp',
@@ -230,9 +233,8 @@ export const projects: Project[] = [
 				}
 			},
 			{
-				points: [
-					'Designed 3D-printed clamps for a bed frame and piano stand to mount both motors without drilling into the apartment.',
-					'Powered the larger blind with a separate 12-volt supply. Used HomeSpan to set the opening in 10% steps from Apple Home.'
+				paragraphs: [
+					'I was renting, so I printed clamps to mount one motor on my bed frame and the other on the piano stand. The larger blind needed a separate 12-volt supply. An ESP32 running HomeSpan let me set either blind in 10% increments from Apple Home.'
 				]
 			}
 		],
@@ -240,7 +242,7 @@ export const projects: Project[] = [
 			{
 				id: 'UmA7IK7rC7k',
 				title: 'DIY HomeKit-Enabled Smart Blinds with ESP32',
-				poster: '/assets/projects/sunrise-hardware.png',
+				poster: '/assets/projects/sunrise-circuit-board.jpg',
 			}
 		]
 	}

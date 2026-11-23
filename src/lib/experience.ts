@@ -35,7 +35,7 @@ export const experience: ExperienceItem[] = [
 			{
 				title: 'GPU inference clusters',
 				body: [
-					'My teammates and I built the GPU serving clusters behind Roblox’s chat filters. I wrote the Terraform and Kubernetes deployment code that brought up a new cluster in about 30 minutes.',
+					'My teammates and I built GPU clusters from scratch to serve machine learning models at Roblox, including the chat filters. I wrote the Terraform and Kubernetes deployment code we used to bring a new cluster online in about 30 minutes.',
 					'Designed load balancing and automatic failover, fixed downtime during NGINX redeploys, and spread replicas across nodes so we could upgrade the whole cluster while it served live traffic.',
 					'Cut the time to add serving capacity from eight minutes to three by using local NVMe storage.',
 					'Our new clusters ran larger chat filters at half the cost. The model that detects personal information in chat handled 370,000 requests per second at peak.'
@@ -57,8 +57,9 @@ export const experience: ExperienceItem[] = [
 				title: 'Batch inference and training on Ray',
 				body: [
 					'Adapted KubeRay to Roblox’s schedulers and built the Go job service and dashboard. The platform handled more than 100 jobs a day.',
-					'Enabled RDMA for distributed training and helped 3D researchers process petabytes of data on Ray.',
-					'Put a code editor on the Ray head node so researchers could try a change in seconds. They used to rebuild a container and wait over ten minutes. The GPU workers could scale to zero while the editor stayed open.'
+					'Enabled RDMA between on-premises training nodes and EFA on AWS. The 3D foundation model team used Ray to process petabytes of data.',
+					'Built a cloud IDE by integrating Coder with Ray. The workspace ran on the Ray head node, so researchers could keep their editor open while idle GPU workers scaled to zero.',
+					'Used Seekable OCI (SOCI) to load container image data on demand. New development workspaces started six times faster.'
 				],
 				articles: [{
 					title: 'Running AI Inference at Scale in the Hybrid Cloud',
@@ -69,7 +70,7 @@ export const experience: ExperienceItem[] = [
 			{
 				title: 'Labeling 3D assets on idle GPUs',
 				body: [
-					'Managed GPU allocations across fleets totaling more than 10,000 GPUs.',
+					'Managed GPU allocations across shared Kubernetes nodes.',
 					'Used spare GPUs to label 100 million assets for a 3D foundation model. Labeling jobs could pause when training reclaimed the GPUs and resume later.'
 				]
 			}

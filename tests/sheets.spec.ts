@@ -258,11 +258,11 @@ test('the scrolled toolbar blurs the article, leaves space around the close cont
 	await expect(grip).toHaveCSS('backdrop-filter', /invert\(1\)/);
 });
 
-test('direct project reload closes to the archive and the Sunrise cover uses the original hardware photo', async ({ page }) => {
+test('direct project reload closes to the archive and Sunrise shows the circuit board on the cover and the motor on the card', async ({ page }) => {
 	await page.emulateMedia({ reducedMotion: 'reduce' });
 	await page.goto('/projects/project-sunrise/');
 	await page.reload();
-	await expect(page.locator('.media-poster')).toHaveAttribute('src', '/assets/projects/sunrise-hardware.png');
+	await expect(page.locator('.media-poster')).toHaveAttribute('src', '/assets/projects/sunrise-circuit-board.jpg');
 	await page.getByRole('link', { name: 'Close project', exact: true }).click();
 	await expect(page).toHaveURL(/\/projects\/$/);
 	await expect(page.getByRole('link', { name: 'Explore Project Sunrise', exact: true }).locator('img')).toHaveAttribute('src', '/assets/projects/sunrise-hardware.png');
