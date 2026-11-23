@@ -51,6 +51,11 @@ test('mobile theme pull tracks touch, ignores a short pull and returns to rest',
 	expect((await handle.boundingBox())!.y).toBeGreaterThan(box!.y + 30);
 	await page.screenshot({path: 'qa/lamp-mobile-pulled.png'});
 	await touch('touchEnd');
+	const pagePull = await page.locator('#main').evaluate(main => {
+		const pull = main.getAnimations().find(animation => animation.effect?.getTiming().duration === 500);
+		return (pull?.effect as KeyframeEffect | undefined)?.getKeyframes()[1];
+	});
+	expect(pagePull).toMatchObject({ offset: .5, transform: 'translateY(10px)', opacity: '0.65' });
 	await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 	await expect(handle).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)');
 	await touch('touchStart', 0); await touch('touchMove', 40); await touch('touchCancel');

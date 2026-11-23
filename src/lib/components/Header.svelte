@@ -13,7 +13,7 @@
 	let entranceGeneration = 0;
 	const isHome = $derived($page.url.pathname === '/');
 	const selectedPath = $derived($navigating?.to?.url.pathname || $page.url.pathname);
-	let { onTabPull }: { onTabPull: (path: string) => void } = $props();
+	let { onPagePull }: { onPagePull: (path?: string) => void } = $props();
 
 	let repeatTug: Animation | undefined;
 
@@ -30,7 +30,7 @@
 				{ translate: '0 0' }
 			], { duration: 330 });
 		}
-		onTabPull(link.pathname);
+		onPagePull(link.pathname);
 	}
 
 	function warmFocusedTab(event: FocusEvent) {
@@ -68,25 +68,31 @@
 		introRunning = true;
 		try {
 			const offset = Math.max(0, innerHeight / 2 - identity.getBoundingClientRect().top - identity.offsetHeight / 2);
-			const settleAt = 3600;
-			const settleDuration = 700;
+			const settleAt = 3000;
+			const settleDuration = 1000;
 			entrance.push(identity.animate([
 				{ transform: `translateY(${offset}px)` }, { transform: 'translateY(0)' }
 			], { delay: settleAt, duration: settleDuration, easing: 'ease-in-out', fill: 'backwards' }));
-			const reveal = (selector: string, delay: number, duration: number) => {
+			const fade: Keyframe[] = [{ opacity: 0 }, { opacity: 1 }];
+			function reveal(selector: string, delay: number, duration: number, frames = fade, easing = 'linear') {
 				const element = identity?.querySelector(selector);
-				if (element) entrance.push(element.animate([
-					{ opacity: 0, filter: 'blur(4px)' }, { opacity: 1, filter: 'blur(0)' }
-				], { delay, duration, fill: 'backwards' }));
-			};
-			reveal('.greeting-hi', 60, 140);
-			reveal('.greeting-im', 160, 160);
-			reveal('.header-name', 780, 500);
-			reveal('.summary-lead', 1470, 200);
-			reveal('.summary-detail', 2270, 330);
+				if (element) entrance.push(element.animate(frames, { delay, duration, easing, fill: 'backwards' }));
+			}
+			reveal('.greeting-hi', 400, 400);
+			reveal('.greeting-im', 900, 400);
+			reveal('.header-name', 1000, 1200, [
+				{ opacity: 0, filter: 'blur(5px)' }, { opacity: 1, filter: 'blur(0)' }
+			], 'ease-in-out');
+			reveal('.header-summary', 2000, 500, [
+				{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }
+			], 'cubic-bezier(.215,.61,.355,1)');
+			identity.querySelectorAll('.summary-phrase').forEach((phrase, index) => {
+				entrance.push(phrase.animate(fade, { delay: 2040 + index * 110, duration: 330, fill: 'backwards' }));
+			});
+			reveal('.replay-button', settleAt, settleDuration);
 			entrance.push(backdrop.animate([
 				{ opacity: 1 }, { opacity: 0 }
-			], { delay: settleAt, duration: settleDuration, fill: 'both' }));
+			], { delay: 3500, duration: 500, fill: 'both' }));
 			await tick();
 			if (generation !== entranceGeneration) return;
 			root.dataset.entrance = 'running';
@@ -140,6 +146,7 @@
 		};
 	});
 	function toggleTheme() {
+		onPagePull();
 		dark = !dark;
 		document.documentElement.dataset.theme = dark ? 'dark' : 'light';
 		try {
@@ -155,15 +162,16 @@
 		<p class="header-greeting"><span class="greeting-hi">Hi,</span> <span class="greeting-im">I'm</span></p>
 		<svelte:element this={isHome ? 'h1' : 'div'} class="header-name"><a href="/">Steve Han.</a></svelte:element>
 		<p class="header-summary">
-			<span class="summary-lead light">I build</span>
-			<span class="summary-detail">AI infrastructure<br />
-				<span class="light">for</span> agents<span class="light">,</span> distributed training<span class="light">,<br />and</span> production inference<span class="light">.</span>
-				<button class="replay-button" onclick={replayEntrance} aria-label="Replay entrance animation" title="Replay entrance animation">
-					<svg width="15" height="15" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4" aria-hidden="true">
-						<path d="M21 18l10 6-10 6z" stroke-linejoin="round" /><path d="M11 37a18 18 0 1 0 0-26l-5 6M6 9v8h8" stroke-linecap="round" stroke-linejoin="round" />
-					</svg>
-				</button>
-			</span>
+			<span class="light">I build</span>
+			<span class="summary-phrase">AI infrastructure</span><br />
+			<span class="summary-phrase"><span class="light">for</span> agents<span class="light">,</span></span>
+			<span class="summary-phrase">distributed training<span class="light">,</span></span><br />
+			<span class="summary-phrase"><span class="light">and</span> production inference<span class="light">.</span></span>
+			<button class="replay-button" onclick={replayEntrance} aria-label="Replay entrance animation" title="Replay entrance animation">
+				<svg width="15" height="15" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4" aria-hidden="true">
+					<path d="M21 18l10 6-10 6z" stroke-linejoin="round" /><path d="M11 37a18 18 0 1 0 0-26l-5 6M6 9v8h8" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</button>
 		</p>
 	</div>
 	<div class="header-controls">

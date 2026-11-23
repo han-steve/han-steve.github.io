@@ -78,7 +78,7 @@ export const projects: Project[] = [
 				paragraphs: [
 					'For my master’s at UT Austin’s Robot Perception and Learning Lab, I worked on teaching a humanoid robot to do household tasks by imitation. I built the VR interface our team used to demonstrate those tasks and record the training data.',
 					'The Quest 2 showed the view from the robot’s stereo cameras. Moving either hand controller moved the corresponding robot hand. We used the same controls in MuJoCo and on the physical robot.',
-					'We collected 250 demonstrations per task. In tests on the physical robot, the trained policy took the cap off a spray can in nine of ten trials and put a tool back in its box in eight of ten.'
+					'From those demonstrations, the robot learned to take the cap off a spray can and put a tool back in its box.'
 				]
 			}
 		],
@@ -181,12 +181,12 @@ export const projects: Project[] = [
 					alt: 'Overlaid scooter paths from the origin to a red target 50 meters to the left. One green path veers off to the lower right.',
 					width: 1400,
 					height: 788,
-					caption: 'I ran 200 trials with the scooter pointed in a random direction each time. It got within 4 meters of the red target 199 times. The green line at the bottom right is the one that missed.'
+					caption: 'Each line shows a run with the scooter facing a different direction at the start. The red dot is the target. The green path at the bottom right missed it.'
 				}
 			},
 			{
 				paragraphs: [
-					'The same controller reached all 200 targets in a second test with random starting positions and goals 50 to 100 meters away. For the last run, I gave the scooter a new waypoint each time it reached one. It rode the whole route without stopping.'
+					'Once the scooter could steer to a single target, I gave it a new waypoint each time it reached one. It rode the whole route without stopping.'
 				],
 				figure: {
 					image: '/assets/projects/scooter/waypoints.webp',

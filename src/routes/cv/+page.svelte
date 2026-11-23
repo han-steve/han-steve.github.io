@@ -29,13 +29,14 @@
 				<h4 id="agent-infrastructure">Senior Software Engineer · Agent Infrastructure</h4>
 				<span class="cv-date">June 2026 — Present</span>
 				<p>Built the Slack integration and Kubernetes infrastructure for an internal agent platform used by about 1,000 people a month. The agent gets tagged about 2,000 times a day in Slack.</p>
+				<p>Built a Kubernetes sandbox provider with agent-sandbox and gVisor. Wrote Temporal workflows to release idle sandboxes and reconnect each Slack session to its files in cloud storage.</p>
 				<h4>Senior Software Engineer · ML Platform</h4>
 				<span class="cv-date">August 2025 — June 2026</span>
 				<p>Built the RDMA-enabled training environment where the 3D foundation model team logged over 50,000 training hours on 96 H200 GPUs.</p>
-				<p>Integrated Coder with Ray to build a cloud IDE. Researchers could test code changes in seconds instead of waiting over ten minutes for a rebuild.</p>
+				<p>Integrated Coder with Ray to build a cloud IDE. Researchers could test code changes in seconds instead of waiting over ten minutes for a rebuild. Used Seekable OCI (SOCI) to start new workspaces six times faster.</p>
 				<h4>Software Engineer · ML Platform</h4>
 				<span class="cv-date">September 2023 — August 2025</span>
-				<p>Helped build production GPU inference clusters from scratch for ML workloads including chat filtering. Automated cluster setup with Terraform and Kubernetes.</p>
+				<p>Helped build active-active GPU inference clusters from scratch across multiple regions. Designed load balancing and automatic failover with AWS Application Load Balancers. Automated cluster setup with Terraform and Kubernetes.</p>
 				<p>Built the Ray job platform on Kubernetes. Engineers submitted more than 10,000 Ray jobs in the second quarter of 2025.</p>
 			</div>
 			<div class="cv-entry">
@@ -80,7 +81,7 @@
 						title="How Roblox Uses AI to Moderate Content on a Massive Scale"
 						image="/assets/publications/moderation.webp"
 						source="Roblox" date="July 2025"
-						description="Wrote the Terraform and Kubernetes deployment code that brought new inference clusters online in about 30 minutes. The personal-information filter ran on those clusters."
+						description="Helped build the GPU clusters that serve Roblox’s safety models. Wrote the Terraform and Kubernetes code that brought each cluster online in about 30 minutes."
 					/>
 				</li>
 				<li>

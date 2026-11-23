@@ -47,6 +47,10 @@ for (const colorScheme of ['light', 'dark'] as const) {
 			await expect(page.locator('html')).toHaveAttribute('data-entrance','pending');
 			release();
 			await expect(page.locator('html')).toHaveAttribute('data-entrance','running');
+			const delays = await page.locator('.header-summary, .summary-phrase').evaluateAll(elements =>
+				elements.map(element => element.getAnimations()[0]?.effect?.getTiming().delay)
+			);
+			expect(delays).toEqual([2000, 2040, 2150, 2260, 2370]);
 			await page.waitForTimeout(200);
 			const frames = await page.evaluate(() => (window as any).entranceFrames);
 			expect(frames.length).toBeGreaterThan(2);

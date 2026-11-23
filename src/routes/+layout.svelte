@@ -23,7 +23,7 @@
 		pageAnimation?.cancel();
 	}
 
-	function pullTab(path: string) {
+	function pullPage(path?: string) {
 		if (!main || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 		const pageStart = getComputedStyle(main);
 		const initial = { transform: pageStart.transform, opacity: pageStart.opacity };
@@ -71,7 +71,7 @@
 
 <a class="skip-link" href={directExperience || selected?.kind === 'experience' ? '#experience-title' : covered ? '#project-title' : '#main'}>Skip to content</a>
 <div class="site-shell" class:home={$page.route.id === '/'} inert={covered} aria-hidden={covered ? 'true' : undefined}>
-	<Header onTabPull={pullTab} />
+	<Header onPagePull={pullPage} />
 	<main id="main" tabindex="-1" bind:this={main}>
 		{#if directProject}
 			<div class="page-top"><h2>Projects</h2></div>

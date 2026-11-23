@@ -26,19 +26,19 @@ export const experience: ExperienceItem[] = [
 			{
 				title: 'Agent infrastructure',
 				body: [
-					'Roblox engineers can tag our internal agent in a Slack thread to run code. I built the Slack integration and Kubernetes clusters for the agent platform. About 1,000 people use it each month, and the agent gets about 2,000 tags a day.',
-					'Built our Kubernetes sandbox provider with agent-sandbox and gVisor for code isolation. A pool of ready sandboxes brought startup below one second.',
-					'Wrote Temporal workflows to release idle sandboxes and restore the same workspace when a user resumed a Slack session. Workspace files persisted in cloud storage between sessions.',
+					'Roblox engineers tag our agent in Slack to run code. I built the Slack integration, including routing messages to the right session, and the Kubernetes clusters where the code runs. About 1,000 people use the platform each month. The agent gets tagged about 2,000 times a day.',
+					'I built the sandbox provider with agent-sandbox and gVisor. Keeping a pool ready brought sandbox startup below one second.',
+					'My Temporal workflows shut down idle sandboxes. When someone returns to a Slack thread, the workflow attaches their files from cloud storage to a new sandbox.',
 					'Built a Slack bot that checks stuck training jobs and answers debugging questions from their logs (6,400 invocations).'
 				]
 			},
 			{
 				title: 'GPU inference clusters',
 				body: [
-					'My teammates and I built GPU clusters from scratch to serve machine learning models at Roblox, including the chat filters. I wrote the Terraform and Kubernetes deployment code we used to bring a new cluster online in about 30 minutes.',
-					'Designed load balancing and automatic failover, fixed downtime during NGINX redeploys, and spread replicas across nodes so we could upgrade the whole cluster while it served live traffic.',
+					'My teammates and I built Roblox’s GPU inference clusters from scratch. The clusters serve ML workloads, including safety models, in an active-active setup across multiple regions. I wrote the Terraform and Kubernetes code that brought a new cluster online in about 30 minutes.',
+					'I designed the load balancing and automatic failover. The AWS Application Load Balancer sent requests directly to NGINX pods, removing a network hop. I fixed downtime during NGINX redeploys and spread replicas across nodes so we could upgrade a cluster while it served traffic.',
 					'Cut the time to add serving capacity from eight minutes to three by using local NVMe storage.',
-					'Our new clusters ran larger chat filters at half the cost. The model that detects personal information in chat handled 370,000 requests per second at peak.'
+					'The new clusters ran larger safety models at half the cost. One handled 370,000 requests per second at peak.'
 				],
 				articles: [
 					{
@@ -57,7 +57,7 @@ export const experience: ExperienceItem[] = [
 				title: 'Batch inference and training on Ray',
 				body: [
 					'Adapted KubeRay to Roblox’s schedulers and built the Go job service and dashboard. The platform handled more than 100 jobs a day.',
-					'Enabled RDMA between on-premises training nodes and EFA on AWS. The 3D foundation model team used Ray to process petabytes of data.',
+					'Built the on-premises training environment and enabled RDMA between nodes. Our 3D foundation model team processed petabytes of data with Ray and logged over 50,000 training hours on 96 H200 GPUs. I also enabled EFA on AWS.',
 					'Built a cloud IDE by integrating Coder with Ray. The workspace ran on the Ray head node, so researchers could keep their editor open while idle GPU workers scaled to zero.',
 					'Used Seekable OCI (SOCI) to load container image data on demand. New development workspaces started six times faster.'
 				],
