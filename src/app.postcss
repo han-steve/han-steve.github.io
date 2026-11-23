@@ -605,25 +605,13 @@ em { font-style: normal; font-weight: 600; }
 	.sheet-close:focus-visible::before { outline-color: Highlight; }
 }
 .sheet-handle { position: absolute; top: 0; left: calc(50% - 48px); width: 96px; height: 28px; z-index: 7; cursor: grab; touch-action: none; }
-.sheet-handle span { display: block; width: 36px; height: 4px; margin: 10px auto; border-radius: 2px; background: var(--handle-fill, #ffffffd9); box-shadow: 0 1px 4px #0008; }
+.sheet-handle span { display: block; width: 36px; height: 4px; margin: 10px auto; border-radius: 2px; background: #fff; box-shadow: 0 1px 4px #0008; }
 .sheet-with-toolbar .sheet-handle span { background: var(--ink); box-shadow: none; }
 .sheet-handle:active { cursor: grabbing; }
-@supports ((backdrop-filter: invert(1)) or (-webkit-backdrop-filter: invert(1))) {
-	:where(.project-sheet:not(.sheet-with-toolbar)) .sheet-handle span {
-		/* Render a light grip over dark pixels and a dark grip over light pixels. */
-		--handle-contrast: grayscale(1) brightness(1.12) contrast(20) invert(1) contrast(.82);
-		background: transparent;
-		box-shadow: none;
-		-webkit-backdrop-filter: var(--handle-contrast);
-		backdrop-filter: var(--handle-contrast);
-	}
-}
 @media (forced-colors: active) {
 	.project-sheet .sheet-handle span {
 		forced-color-adjust: none;
 		background: CanvasText;
-		-webkit-backdrop-filter: none;
-		backdrop-filter: none;
 	}
 }
 .case-study { width: 100%; padding-bottom: 40px; }

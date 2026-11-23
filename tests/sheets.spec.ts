@@ -255,7 +255,8 @@ test('the scrolled toolbar blurs the article, leaves space around the close cont
 	expect(layers).toEqual({ blur: 'blur(16px)', isTranslucent: true, top: 10, bottom: 10, discSize: 28, targetSize: 44, belowGrip: true, gripIsOnTop: true });
 	await scroll.evaluate(el => { el.scrollTop = 0; });
 	await expect(sheet).not.toHaveClass(/sheet-with-toolbar/);
-	await expect(grip).toHaveCSS('backdrop-filter', /invert\(1\)/);
+	await expect(grip).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+	await expect(grip).toHaveCSS('backdrop-filter', 'none');
 });
 
 test('direct project reload closes to the archive and Sunrise shows the circuit board on the cover and the motor on the card', async ({ page }) => {
