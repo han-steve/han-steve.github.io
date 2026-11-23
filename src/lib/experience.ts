@@ -26,7 +26,7 @@ export const experience: ExperienceItem[] = [
 			{
 				title: 'Agent infrastructure',
 				body: [
-					'Built the Slack integration and Kubernetes clusters for our internal agent platform. About 1,000 people use it each month, and the agent gets tagged about 2,000 times a day in Slack.',
+					'Roblox engineers can tag our internal agent in a Slack thread to run code. I built the Slack integration and Kubernetes clusters for the agent platform. About 1,000 people use it each month, and the agent gets about 2,000 tags a day.',
 					'Built our Kubernetes sandbox provider with agent-sandbox and gVisor for code isolation. A pool of ready sandboxes brought startup below one second.',
 					'Wrote Temporal workflows to release idle sandboxes and restore the same workspace when a user resumed a Slack session. Workspace files persisted in cloud storage between sessions.',
 					'Built a Slack bot that checks stuck training jobs and answers debugging questions from their logs (6,400 invocations).'
@@ -103,10 +103,10 @@ export const experience: ExperienceItem[] = [
 		role: 'Founding Engineer',
 		period: 'February — July 2022',
 		location: 'Austin, Texas',
-		description: 'I built the mobile app and launch site for Orca, where UT Austin students could send money and split bills.',
+		description: 'A payments app for UT Austin students. I built the mobile app and launch site.',
 		sections: [
 			{
-				body: 'I worked with two friends on Orca, a fintech startup for UT Austin students. I built the React Native app for sending money and splitting bills. We were in Y Combinator’s Winter 2022 batch.',
+				body: 'Orca was a payments app for UT Austin students to send money and split bills. I worked with two friends as a founding engineer and built the mobile app in React Native. We were in Y Combinator’s Winter 2022 batch.',
 				figure: {
 					image: '/assets/experience/orca-bill-splitting.png',
 					alt: 'Orca’s group expense screen lists shared trip costs and shows who has paid.',
@@ -126,20 +126,20 @@ export const experience: ExperienceItem[] = [
 		role: 'Software Engineer',
 		period: 'August 2020 — April 2022',
 		location: 'Austin, Texas',
-		description: 'I rewrote Dive’s group-chat web client in React and TypeScript and worked on sign-up in the mobile app.',
+		description: 'Group chats and a shared event calendar for college organizations. I rewrote the web app and worked on mobile sign-up.',
 		sections: [
 			{
-				body: 'Groups used Dive to chat and plan events. I rewrote our web app in React and TypeScript, with Redux and Firebase.',
+				body: 'Dive was an event planning and chat app for college groups. Each group had chat channels and a calendar where members could RSVP to events. I rewrote the web app in React and TypeScript, using Redux and Firebase.',
 				figure: {
 					image: '/assets/experience/dive-calendar.webp',
 					alt: 'Dive’s mobile Events screen has RSVP filters and illustrated cards for a drive-in movie and a hike.',
 					width: 496,
 					height: 644,
-					caption: 'In our calendar, you could see what you’d RSVP’d to and what you were hosting.'
+					caption: 'The Events tab let you switch between events you were going to and ones you were hosting.'
 				}
 			},
 			{
-				body: 'On mobile, I worked with our designers on sign-up. I connected it to Firebase and handled loading and failed requests.'
+				body: 'I worked with our designers on mobile sign-up and connected the new screens to Firebase.'
 			}
 		]
 	}

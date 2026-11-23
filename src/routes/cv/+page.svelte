@@ -51,7 +51,7 @@
 				<h4>Founding Engineer</h4>
 				<span class="cv-date">February — July 2022 · Austin</span>
 				<p>
-					Worked with two friends on a fintech startup for UT Austin students.
+					Worked with two friends on a payments app for UT Austin students to send money and split bills.
 					Built the React Native app, launch site and campus ads.
 				</p>
 			</div>
@@ -59,7 +59,7 @@
 				<h3><a use:experienceSurface class="company-link" href="/experience/dive-chat/"><CompanyMark slug="dive-chat" /><span data-experience-part="title">Dive Chat</span></a></h3>
 				<h4>Software Engineer</h4>
 				<span class="cv-date">August 2020 — April 2022 · Austin</span>
-				<p>Rewrote the group chat web app in React and TypeScript and worked on mobile sign-up.</p>
+				<p>Rewrote the React and TypeScript web client for a college group chat and event planning app. Worked with designers on mobile sign-up.</p>
 			</div>
 		</div>
 	</section>
@@ -103,8 +103,7 @@
 			<p>B.S. and M.S. in Computer Science<br />B.S.A. in Mathematics<br />Business Spanish Certificate</p>
 			<p>Undergraduate GPA 3.99</p>
 			<p>
-				Built the VR teleoperation system for <a class="text-link" href="/projects/trill/">TRILL</a>
-				at the Robot Perception and Learning Lab during master’s research.
+				Built the VR interface for <a class="text-link" href="/projects/trill/">TRILL</a> during master’s research at the Robot Perception and Learning Lab. Used it to record demonstrations for teaching a humanoid robot household tasks.
 			</p>
 			<p>
 				Master’s thesis · <a class="text-link" href={thesisUrl}>VR Teleoperation Interface for Learning Loco-manipulation of Humanoid Robots</a>

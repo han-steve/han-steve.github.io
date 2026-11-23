@@ -40,7 +40,7 @@ export const talks = [
 	{
 		year: '2025',
 		title: 'How Roblox Trains 3D Foundation Models with Ray',
-		description: 'Demonstrated a Ray training workspace that kept the editor open while GPU workers scaled to zero. Co-presented with Liangjun Feng and Yiqing Wang.',
+		description: 'Demonstrated the Coder workspace built for training on Ray. Researchers could edit code on the head node while idle GPU workers scaled to zero. Co-presented with Liangjun Feng and Yiqing Wang.',
 		context: 'Ray Summit · Roblox',
 		url: 'https://www.youtube.com/watch?v=FhZaVU5-2xE',
 		id: 'FhZaVU5-2xE'
@@ -61,7 +61,7 @@ export const projects: Project[] = [
 		title: 'TRILL',
 		category: 'Robotics & research',
 		year: '2023',
-		description: 'Built a VR teleoperation system at UT Austin to teach humanoid robots to walk and handle objects from human demonstrations.',
+		description: 'Master’s research at UT Austin on teaching a humanoid robot household tasks. Built the VR controls our team used to record demonstrations.',
 		image: '/assets/projects/trill.png',
 		role: 'Co-author · Master’s thesis · UT Austin',
 		tools: ['Imitation learning', 'VR teleoperation', 'Robotics'],
@@ -96,7 +96,7 @@ export const projects: Project[] = [
 		title: 'VoxCraft VR',
 		category: 'Graphics & interaction',
 		year: 'May 2021',
-		description: 'Developed a voxel game for the Quest 2 with Grace Liu. Designed an editable world players could mine and build in with hand controllers.',
+		description: 'A Minecraft-style game for the Quest 2, made with Grace Liu for our computer graphics final at UT Austin.',
 		image: '/assets/projects/voxcraft.png',
 		role: 'UT Austin computer graphics final, with Grace Liu',
 		tools: ['A-Frame', 'JavaScript', 'WebXR'],
@@ -249,8 +249,8 @@ export const projects: Project[] = [
 ];
 
 export const hackathons = [
- { title: 'Swiper Go Swiping', year: '2021', description: 'Connected an Electron check-in kiosk to a hand tracker so visitors could swipe through check-in without touching the screen.', event: 'TAMUhack', award: 'Third place · Best UI/UX', url: 'https://devpost.com/software/swipergoswiping' },
- { title: 'EquiTeach', year: '2021', description: 'Turned recorded tutoring sessions into practice questions students could revisit.', event: 'HackDFW', award: 'Three sponsor prizes', url: 'https://devpost.com/software/equiteach' },
- { title: 'Haven', year: '2020', description: 'Prototyped a housing exchange where people could offer an empty apartment and fund a stay with donated tokens.', event: 'HackTX', award: 'Azure Champ Prize', url: 'https://devpost.com/software/haven-vjxtpg' },
+ { title: 'Swiper Go Swiping', year: '2021', description: 'An airport check-in kiosk passengers could control with hand gestures. I connected the Electron interface to OpenCV hand tracking.', event: 'TAMUhack', award: 'Third place · Best UI/UX', url: 'https://devpost.com/software/swipergoswiping' },
+ { title: 'EquiTeach', year: '2021', description: 'A tutoring app that generated practice quizzes from the transcript of each student’s session.', event: 'HackDFW', award: 'Three sponsor prizes', url: 'https://devpost.com/software/equiteach' },
+ { title: 'Haven', year: '2020', description: 'A prototype for finding temporary housing. Hosts could list an empty apartment, and people who needed a place to stay could apply.', event: 'HackTX', award: 'Azure Champ Prize', url: 'https://devpost.com/software/haven-vjxtpg' },
  { title: 'Rentech', year: '2020', description: 'Built a lending site for students to share spare laptops when classes moved online.', event: 'EarthxHack', award: 'UT Dallas Challenge', url: 'https://devpost.com/software/rentech' }
 ];
