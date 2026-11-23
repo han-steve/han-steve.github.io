@@ -50,13 +50,27 @@ test('mobile theme pull tracks touch, ignores a short pull and returns to rest',
 	for (const offset of [10, 25, 40, 55]) await touch('touchMove', offset);
 	expect((await handle.boundingBox())!.y).toBeGreaterThan(box!.y + 30);
 	await page.screenshot({path: 'qa/lamp-mobile-pulled.png'});
+	const main = page.locator('#main');
+	await main.evaluate(element => {
+		const animate = element.animate.bind(element);
+		element.animate = (...args) => {
+			const animation = animate(...args);
+			animation.pause();
+			animation.currentTime = 125;
+			return animation;
+		};
+	});
 	await touch('touchEnd');
-	const pagePull = await page.locator('#main').evaluate(main => {
+	const pagePull = await main.evaluate(main => {
 		const pull = main.getAnimations().find(animation => animation.effect?.getTiming().duration === 500);
 		return (pull?.effect as KeyframeEffect | undefined)?.getKeyframes()[1];
 	});
 	expect(pagePull).toMatchObject({ offset: .5, transform: 'translateY(10px)', opacity: '0.65' });
+	await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+	await main.evaluate(element => { element.getAnimations()[0].currentTime = 250; });
 	await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+	await expect(main).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 10)');
+	await main.evaluate(element => { element.getAnimations()[0].play(); });
 	await expect(handle).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)');
 	await touch('touchStart', 0); await touch('touchMove', 40); await touch('touchCancel');
 	await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');

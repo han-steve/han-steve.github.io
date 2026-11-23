@@ -36,7 +36,7 @@
 			name: 'Terraform',
 			svg: '/assets/icons/terraform.svg',
 			proficiency: 4 as const,
-			description: 'Used Terraform to bootstrap GPU inference clusters and Kubernetes clusters for our Slack agent at Roblox.',
+			description: 'Bootstrapped Kubernetes clusters for GPU inference and agent infrastructure at Roblox.',
 			type: 'infra'
 		},
 		{
@@ -58,7 +58,7 @@
 		{
 			name: 'Kubeflow',
 			svg: '/assets/icons/kubeflow.svg',
-			proficiency: 4 as const,
+			proficiency: 3.5 as const,
 			description: 'Operated the Kubeflow ML platform (Notebooks, Pipelines, Serving) used by hundreds of internal MLEs',
 			type: 'infra'
 		},

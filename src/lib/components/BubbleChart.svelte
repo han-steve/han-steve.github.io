@@ -2,7 +2,7 @@
 export interface Technology {
     name: string;
     svg: string;
-    proficiency: 1.5 | 2 | 3 | 4 | 5;
+    proficiency: 1.5 | 2 | 3 | 3.5 | 4 | 5;
     description: string;
     type: 'infra' | 'framework' | 'language';
     padding?: number; // 0-1, percentage of radius to use as padding

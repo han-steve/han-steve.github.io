@@ -123,7 +123,7 @@
 				<a class="text-link" href="https://devpost.com/Steve_Han">Winner of seven hackathons</a>
 			</p>
 			<p>UT Austin Distinguished Honors</p>
-			<p><a class="text-link" href="https://www.credly.com/badges/a578df66-4f25-409d-98e4-d99f718d2b65">AWS Certified Developer – Associate</a> · June 2022 – June 2025</p>
+			<p><a class="text-link" href="https://www.credly.com/badges/a578df66-4f25-409d-98e4-d99f718d2b65">AWS Certified Developer – Associate</a></p>
 		</div>
 	</section>
 	<section class="cv-section">

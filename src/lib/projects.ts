@@ -221,8 +221,8 @@ export const projects: Project[] = [
 		sections: [
 			{
 				paragraphs: [
-					'I wanted to wake up to sunlight in my college apartment. I fitted motors to the blinds on both windows so I could open them in the morning with Apple Home.',
-					'My first spool was an empty ibuprofen bottle with a shoelace wound around it. The motor stalled. A bottle cap and some thread from the sewing kit my mom insisted I take to college worked better. The smaller spool gave the motor enough pull to lift the blind, but the thread kept slipping off, so I designed a spool in Fusion 360.'
+					'I wanted to wake up to sunlight, so I set out to automate both blinds in my college apartment. I used stepper motors so the controller could count steps to open a blind partway.',
+					'The first spool was an empty ibuprofen bottle. The motor stalled, so I tried using just the cap. Winding the thread closer to the shaft meant the same blind took less torque to lift. That worked, but the thread had nowhere to wind neatly. I designed a spool in Fusion 360 and printed it with a groove for each cord.'
 				],
 				figure: {
 					image: '/assets/projects/field-notes/sunrise-spool.webp',
@@ -234,7 +234,8 @@ export const projects: Project[] = [
 			},
 			{
 				paragraphs: [
-					'I was renting, so I printed clamps to mount one motor on my bed frame and the other on the piano stand. The larger blind needed a separate 12-volt supply. An ESP32 running HomeSpan let me set either blind in 10% increments from Apple Home.'
+					'The motor worked on the ESP32’s 5 V output in my first test, but stopped working when I added HomeKit. I rewired the stepper from unipolar to bipolar and switched to a driver with its own 12 V supply. The ESP32 could stay connected, and the motor could lift the larger blind.',
+					'I printed clamps for my bed frame and piano stand so I could mount the motors without drilling. In Apple Home, each 10% change sent a fixed number of steps to the motor. I added extra steps at the end of the closing cycle to make sure the big blind shut all the way.'
 				]
 			}
 		],

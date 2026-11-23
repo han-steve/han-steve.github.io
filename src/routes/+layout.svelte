@@ -13,38 +13,68 @@
 	let { children } = $props();
 	let main = $state<HTMLElement>();
 	let pageAnimation: Animation | undefined;
+	let pendingThemeChange: (() => void) | undefined;
+	let themeFrame = 0;
+	const pullDuration = 500;
 	const directProject = $derived($page.route.id === '/projects/[slug]');
 	const directExperience = $derived($page.route.id === '/experience/[slug]');
 	const selected = $derived(detailAt(shallowPath($page.state)));
 	const covered = $derived(directProject || directExperience || !!selected);
 	let pulledPath: string | undefined;
 
-	function stopMotion() {
-		pageAnimation?.cancel();
+	function applyThemeChange() {
+		cancelAnimationFrame(themeFrame);
+		const changeTheme = pendingThemeChange;
+		pendingThemeChange = undefined;
+		changeTheme?.();
 	}
 
-	function pullPage(path?: string) {
-		if (!main || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+	function stopMotion() {
+		pageAnimation?.cancel();
+		applyThemeChange();
+	}
+
+	function pullPage(path?: string, changeTheme?: () => void) {
+		// Two theme requests before the turning point cancel each other out.
+		if (changeTheme) pendingThemeChange = pendingThemeChange ? undefined : changeTheme;
+		if (!main || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			applyThemeChange();
+			return;
+		}
 		const pageStart = getComputedStyle(main);
 		const initial = { transform: pageStart.transform, opacity: pageStart.opacity };
-		stopMotion();
+		cancelAnimationFrame(themeFrame);
+		pageAnimation?.cancel();
 		pulledPath = path;
 		// Keep the original two 250 ms fly phases independent of route loading.
-		pageAnimation = main.animate([
+		const pull = pageAnimation = main.animate([
 			{ ...initial, easing: 'ease-out' },
 			{ transform: 'translateY(10px)', opacity: .65, offset: .5, easing: 'ease-out' },
 			{ transform: 'translateY(0)', opacity: 1 }
-		], { duration: 500 });
+		], { duration: pullDuration });
+		if (pendingThemeChange) {
+			const waitForBottom = () => {
+				const time = pull.currentTime;
+				if (pull.playState === 'idle' || (typeof time === 'number' && time >= pullDuration / 2)) {
+					applyThemeChange();
+				} else {
+					themeFrame = requestAnimationFrame(waitForBottom);
+				}
+			};
+			themeFrame = requestAnimationFrame(waitForBottom);
+		}
 	}
 
 	onMount(() => {
 		const motion = matchMedia('(prefers-reduced-motion: reduce)');
 		const preferenceChanged = () => { if (motion.matches) stopMotion(); };
 		motion.addEventListener('change', preferenceChanged);
+		window.addEventListener('pagehide', stopMotion);
 		document.addEventListener('click', interceptSheetLink, true);
 		return () => {
 			stopMotion();
 			motion.removeEventListener('change', preferenceChanged);
+			window.removeEventListener('pagehide', stopMotion);
 			document.removeEventListener('click', interceptSheetLink, true);
 		};
 	});

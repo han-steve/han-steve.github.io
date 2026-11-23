@@ -26,7 +26,7 @@ export const experience: ExperienceItem[] = [
 			{
 				title: 'Agent infrastructure',
 				body: [
-					'Roblox engineers tag our agent in Slack to run code. I built the Slack integration, including routing messages to the right session, and the Kubernetes clusters where the code runs. About 1,000 people use the platform each month. The agent gets tagged about 2,000 times a day.',
+					'Built the Slack integration and Kubernetes infrastructure for an internal agent platform used by about 1,000 people a month. The agent gets tagged about 2,000 times a day in Slack.',
 					'I built the sandbox provider with agent-sandbox and gVisor. Keeping a pool ready brought sandbox startup below one second.',
 					'My Temporal workflows shut down idle sandboxes. When someone returns to a Slack thread, the workflow attaches their files from cloud storage to a new sandbox.',
 					'Built a Slack bot that checks stuck training jobs and answers debugging questions from their logs (6,400 invocations).'

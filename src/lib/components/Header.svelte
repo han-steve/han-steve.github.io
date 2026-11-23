@@ -13,7 +13,7 @@
 	let entranceGeneration = 0;
 	const isHome = $derived($page.url.pathname === '/');
 	const selectedPath = $derived($navigating?.to?.url.pathname || $page.url.pathname);
-	let { onPagePull }: { onPagePull: (path?: string) => void } = $props();
+	let { onPagePull }: { onPagePull: (path?: string, changeTheme?: () => void) => void } = $props();
 
 	let repeatTug: Animation | undefined;
 
@@ -146,7 +146,6 @@
 		};
 	});
 	function toggleTheme() {
-		onPagePull();
 		dark = !dark;
 		document.documentElement.dataset.theme = dark ? 'dark' : 'light';
 		try {
@@ -192,6 +191,6 @@
 				</a>
 			{/each}
 		</nav>
-		<ThemeCord {dark} onpull={toggleTheme} />
+		<ThemeCord {dark} onpull={() => onPagePull(undefined, toggleTheme)} />
 	</div>
 </header>

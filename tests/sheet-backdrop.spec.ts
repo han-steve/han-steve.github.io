@@ -51,7 +51,7 @@ for (const [path, selector] of [
 			await expect(page.locator('html')).toHaveAttribute('data-project-transition', direction);
 			await expect.poll(() => page.evaluate(() => (window as any).__cornerTransition?.ready)).toBe(true);
 			const first = await sample(page, 0);
-			const early = await sample(page, 65);
+			const early = await sample(page, direction === 'open' ? 20 : 65);
 			const late = await sample(page, 270);
 			await finish(page);
 			const settled = await contrast(page);
