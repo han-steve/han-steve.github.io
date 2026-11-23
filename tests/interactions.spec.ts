@@ -297,6 +297,44 @@ test('original bubbles stay centered across full-page capture and resize, and to
     await page.screenshot({ path: 'qa/restored-bubbles-mobile.png', fullPage: true });
 });
 
+test('a swipe over the mobile bubbles scrolls the page and a tap opens the label', async ({ browser }) => {
+	const context = await browser.newContext({
+		viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce',
+		baseURL: process.env.PREVIEW_URL || 'http://127.0.0.1:4178'
+	});
+	try {
+		const page = await context.newPage();
+		await page.goto('/');
+		const chart = page.locator('.bubble-chart');
+		await chart.evaluate(element => element.scrollIntoView({ block: 'center' }));
+		await expect(chart.locator('svg')).toHaveCSS('height', '680px');
+		const bubble = chart.getByRole('button', { name: 'Terraform', exact: true });
+		await expect(bubble).toHaveCSS('opacity', '1');
+		const face = bubble.locator('.bubble-surface');
+		const initial = (await face.boundingBox())!;
+		const x = initial.x + initial.width / 2;
+		const y = initial.y + initial.height / 2;
+		const startScroll = await page.evaluate(() => scrollY);
+		const cdp = await context.newCDPSession(page);
+		await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+		for (const offset of [24, 52, 90, 132]) {
+			await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: y - offset }] });
+		}
+		await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+		await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(startScroll + 50);
+		await expect(bubble).toHaveAttribute('aria-pressed', 'false');
+		// A tap during native scroll momentum stops scrolling. Check tapping at rest.
+		await page.reload();
+		await chart.evaluate(element => element.scrollIntoView({ block: 'center' }));
+		await expect(bubble).toHaveCSS('opacity', '1');
+		const tapped = (await face.boundingBox())!;
+		await page.touchscreen.tap(tapped.x + tapped.width / 2, tapped.y + tapped.height / 2);
+		await expect(bubble).toHaveAttribute('aria-pressed', 'true');
+	} finally {
+		await context.close();
+	}
+});
+
 test('bubble labels fit the settled circle and switch without a stale caption', async ({ page }) => {
 	await page.addInitScript(() => localStorage.setItem('skipAnimation', 'TRUE'));
 	await page.emulateMedia({ reducedMotion: 'no-preference' });

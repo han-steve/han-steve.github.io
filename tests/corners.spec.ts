@@ -2,17 +2,24 @@ import { test, expect, type Page } from '@playwright/test';
 
 import { freezeTransitions } from './helpers/view-transitions';
 
-async function sampleCorners(page: Page, slug: string, label: string) {
+async function sampleCorners(page: Page, slug: string, direction: 'open' | 'close', label: string) {
 	await expect.poll(() => page.evaluate(() => (window as any).__cornerTransition?.ready)).toBe(true);
+	const duration = direction === 'open' ? 520 : 340;
 	for (const progress of [.12, .5, .88]) {
-		const rect = await page.evaluate(async ({slug,progress}) => {
+		const rect = await page.evaluate(async ({ slug, progress, duration }) => {
 			const state = (window as any).__cornerTransition;
-			state.animations.forEach((animation: Animation) => { animation.currentTime = 520 * progress; });
+			state.animations.forEach((animation: Animation) => { animation.currentTime = duration * progress; });
 			await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve(null))));
 			const style = getComputedStyle(document.documentElement, `::view-transition-group(project-${slug}-art)`);
+			const pair = getComputedStyle(document.documentElement, `::view-transition-image-pair(project-${slug}-art)`);
 			const transform = new DOMMatrixReadOnly(style.transform);
-			return {x:transform.m41,y:transform.m42,width:parseFloat(style.width),height:parseFloat(style.height)};
-		}, {slug,progress});
+			return {
+				x: transform.m41, y: transform.m42, width: parseFloat(style.width), height: parseFloat(style.height),
+				radius: pair.borderRadius, duration: parseFloat(style.animationDuration) * 1000
+			};
+		}, { slug, progress, duration });
+		expect(rect.radius).toBe('16px');
+		expect(rect.duration).toBe(duration);
 		expect(rect.width).toBeGreaterThan(40);
 		const png = await page.screenshot({path:`qa/corners-${label}-${progress}.png`});
 		const pixels = await page.evaluate(async ({png,rect}) => {
@@ -50,9 +57,9 @@ for (const scenario of [
 		await card.scrollIntoViewIfNeeded();
 		await card.locator('img').evaluate(image=>(image as HTMLImageElement).decode());
 		await card.click();
-		await sampleCorners(page,scenario.slug,`${scenario.scheme}-open`);
+		await sampleCorners(page, scenario.slug, 'open', `${scenario.scheme}-open`);
 		await page.getByRole('link',{name:'Close project',exact:true}).click();
-		await sampleCorners(page,scenario.slug,`${scenario.scheme}-close`);
+		await sampleCorners(page, scenario.slug, 'close', `${scenario.scheme}-close`);
 		await expect(card).toBeVisible();
 	});
 }

@@ -11,6 +11,7 @@
 
 :root {
 	color-scheme: light;
+	--project-icon-radius: 16px;
 	--paper: #ffffff;
 	--ink: #171717;
 	--muted: #666666;
@@ -351,7 +352,7 @@ em { font-style: normal; font-weight: 600; }
 .project-row .project-art {
 	width: 96px;
 	height: 96px;
-	border-radius: 16px;
+	border-radius: var(--project-icon-radius);
 }
 .project-icon { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; }
 .project-tile-surface { position: absolute; inset: 0; display: block; background: var(--project-surface); border-radius: inherit; view-transition-class: project-surface; pointer-events: none; }
@@ -630,7 +631,7 @@ em { font-style: normal; font-weight: 600; }
 .project-intro h1 { font-size: 34px; line-height: 1.2; margin: 0; }
 .project-heading { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 24px; }
 .project-heading > div:last-child { min-width: 0; }
-.project-title-art { width: 96px; height: 96px; margin-top: -16px; flex: 0 0 auto; border-radius: 18px; }
+.project-title-art { width: 96px; height: 96px; margin-top: -16px; flex: 0 0 auto; border-radius: var(--project-icon-radius); }
 .project-title-art.self-steering-scooter { translate: 0 -20%; pointer-events: none; }
 .project-heading-copy { padding-top: 10px; }
 .project-year { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
@@ -1139,7 +1140,7 @@ figcaption { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top:
 	.header-controls { gap: 2px; }
 	.theme-cord { width: 32px; }
 	.project-heading { gap: 16px; }
-	.project-title-art { width: 80px; height: 80px; margin-top: -12px; border-radius: 14px; }
+	.project-title-art { width: 80px; height: 80px; margin-top: -12px; }
 	.project-heading h1 { font-size: 26px; }
 	.project-heading .eyebrow { font-size: 11px; }
 	.filter-bar { gap: 6px; }
@@ -1155,7 +1156,7 @@ figcaption { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top:
 
 /* The tile supplies the expanding surface. The logo keeps a separate square snapshot. */
 @keyframes project-surface-radius {
- from { border-radius: var(--project-radius-from, 16px); box-shadow: var(--sheet-shadow-from, none); }
+ from { border-radius: var(--project-radius-from, 16px); box-shadow: none; }
  to { border-radius: var(--project-radius-to, 20px); box-shadow: var(--sheet-shadow-to, none); }
 }
 ::view-transition-image-pair(.project-surface) {
@@ -1167,6 +1168,10 @@ figcaption { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top:
 .project-sheet.transitioning { box-shadow: none; }
 ::view-transition-group(.project-surface) { z-index: 1; }
 ::view-transition-group(.project-art), ::view-transition-group(.company-art) { z-index: 3; }
+::view-transition-image-pair(.project-art) {
+	border-radius: var(--project-icon-radius);
+	overflow: hidden;
+}
 
 /* Pin the native-size video and text to the icon as the card reveals them. */
 :root[data-project-transition='open']::view-transition-new(.project-surface),
@@ -1182,15 +1187,32 @@ figcaption { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top:
 ::view-transition-new(.company-art), ::view-transition-new(.project-art) { animation: none; opacity: 0; }
 ::view-transition-new(.company-art):only-child, ::view-transition-new(.project-art):only-child { opacity: 1; }
 @keyframes project-content-in { 0%, 3% { opacity: 0; } 48%, 100% { opacity: 1; } }
-@keyframes project-content-out { 0%, 20% { opacity: 1; } 86%, 100% { opacity: 0; } }
+@keyframes project-content-out { 0%, 8% { opacity: 1; } 78%, 100% { opacity: 0; } }
 :root[data-project-transition='open']::view-transition-old(.project-surface),
 :root[data-project-transition='close']::view-transition-new(.project-surface) { animation: none; opacity: 1; }
 :root[data-project-transition='open']::view-transition-new(.project-surface) { animation: project-content-in 520ms linear both; mix-blend-mode: normal; }
-:root[data-project-transition='close']::view-transition-old(.project-surface) { animation: project-content-out 520ms linear both; mix-blend-mode: normal; }
-:root[data-project-transition='close']::view-transition-group(*) { animation-timing-function: cubic-bezier(.4,0,.6,1); }
+:root[data-project-transition='close'] {
+	--sheet-close-duration: 340ms;
+	--sheet-close-easing: cubic-bezier(.32,.72,.25,1);
+}
+:root[data-project-transition='close']::view-transition-old(.project-surface) {
+	animation: project-content-out var(--sheet-close-duration) ease-in-out both;
+	mix-blend-mode: normal;
+}
+:root[data-project-transition='close']::view-transition-group(*) {
+	animation-duration: var(--sheet-close-duration);
+	animation-timing-function: var(--sheet-close-easing);
+}
+:root[data-project-transition='close']::view-transition-group(root) { animation-duration: 180ms; }
+@keyframes project-surface-close-radius {
+	from { border-radius: var(--project-radius-from, 20px); }
+	to { border-radius: var(--project-radius-to, 16px); }
+}
+:root[data-project-transition='close']::view-transition-image-pair(.project-surface) {
+	animation: project-surface-close-radius var(--sheet-close-duration) var(--sheet-close-easing) both;
+}
 /* Keep the row copy at its natural size inside the same moving clip as the article. */
 :root[data-sheet-kind='experience'][data-project-transition='open'] { --sheet-shadow-to: var(--sheet-shadow); }
-:root[data-sheet-kind='experience'][data-project-transition='close'] { --sheet-shadow-from: var(--sheet-shadow); }
 @keyframes experience-article-in {
 	0%, 14% { opacity: 0; }
 	52%, 100% { opacity: 1; }
@@ -1207,21 +1229,24 @@ figcaption { color: var(--muted); font-size: 12px; line-height: 1.7; margin-top:
 	animation: row-copy-out 75ms ease-out both;
 }
 :root[data-sheet-kind='experience'][data-project-transition='close']::view-transition-new(.project-surface) {
-	animation: row-copy-out 130ms 390ms ease-in reverse both;
+	animation: row-copy-out 105ms calc(var(--sheet-close-duration) - 105ms) ease-in reverse both;
 }
 
 /* Bow downward on a backdrop click, then land exactly on the opener. */
 @keyframes outside-sheet-drop {
-	0%, 100% { translate: 0 0; }
-	28% { translate: 0 48px; }
+	0% { translate: 0 0; animation-timing-function: cubic-bezier(.22,1,.36,1); }
+	24% { translate: 0 44px; animation-timing-function: cubic-bezier(.4,0,.3,1); }
+	100% { translate: 0 0; }
 }
 :root[data-sheet-outside][data-project-transition='close']::view-transition-image-pair(.project-surface) {
-	animation: project-surface-radius 520ms cubic-bezier(.4,0,.6,1) both, outside-sheet-drop 520ms ease-in-out both;
+	animation:
+		project-surface-close-radius var(--sheet-close-duration) var(--sheet-close-easing) both,
+		outside-sheet-drop var(--sheet-close-duration) both;
 }
 :root[data-sheet-outside][data-project-transition='close']::view-transition-image-pair(.project-art),
 :root[data-sheet-outside][data-project-transition='close']::view-transition-image-pair(.company-art),
 :root[data-sheet-outside][data-project-transition='close']::view-transition-image-pair(.experience-title) {
-	animation: outside-sheet-drop 520ms ease-in-out both;
+	animation: outside-sheet-drop var(--sheet-close-duration) both;
 }
 
 .hackathons { margin-top: 64px; }

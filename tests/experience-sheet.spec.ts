@@ -67,12 +67,13 @@ for (const [path, width] of [['/#experience-heading', 1440], ['/cv/', 390]] as c
 		for (const direction of ['open', 'close']) {
 			await expect(page.locator('html')).toHaveAttribute('data-project-transition', direction);
 			const heights: number[] = [];
-			for (const time of [0, 105, 260, 415, 520]) {
-				await seek(page, time);
+			const duration = direction === 'open' ? 520 : 340;
+			for (const fraction of [0, .2, .5, .8, 1]) {
+				await seek(page, fraction * duration);
 				const { surface, art, title } = await frame(page, 'experience-orca');
 				heights.push(surface.h);
-				const progress = direction === 'open' ? time : 520 - time;
-				if (progress === 0 || progress === 520) {
+				const progress = direction === 'open' ? fraction : 1 - fraction;
+				if (progress === 0 || progress === 1) {
 					const end = progress === 0 ? row : panel;
 					expect(surface.w).toBeCloseTo(end.width, 0);
 					expect(surface.h).toBeCloseTo(end.height, 0);
@@ -105,7 +106,7 @@ for (const [path, width] of [['/#experience-heading', 1440], ['/cv/', 390]] as c
 					return { inside, outside };
 				}, { png: png.toString('base64'), surface });
 				expect(ink.outside).toBe(0);
-				if (progress === 520) expect(ink.inside).toBeGreaterThan(100);
+				if (progress === 1) expect(ink.inside).toBeGreaterThan(100);
 			}
 			expect(heights).toEqual([...heights].sort((a,b) => direction === 'open' ? a-b : b-a));
 			expect(new Set(heights).size).toBe(5);
@@ -133,12 +134,12 @@ for (const [path, selector, key] of [
 		const start = (await page.locator('.project-sheet').boundingBox())!;
 		await page.mouse.click(8, 120);
 		await expect(page.locator('html')).toHaveAttribute('data-project-transition', 'close');
-		await seek(page, 125);
+		await seek(page, 80);
 		const { surface, art } = await frame(page, key);
 		expect(surface.drop).toBeGreaterThan(25);
 		expect(surface.y).toBeGreaterThan(start.y + 10);
 		expect(art.drop).toBeCloseTo(surface.drop, 1);
-		await seek(page, 520);
+		await seek(page, 340);
 		expect((await frame(page, key)).surface.drop).toBe(0);
 		await finish(page);
 		await expect(link).toBeFocused();

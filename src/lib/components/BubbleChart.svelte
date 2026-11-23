@@ -21,7 +21,8 @@ const chartId = $props.id();
 
 // Scale factor for bubble sizes based on proficiency
 const BUBBLE_SIZE_SCALE = 10;
-const MOBILE_BREAKPOINT = 600; // Accommodate iPhone Pro Max horizontal layout
+const MOBILE_BREAKPOINT = 600;
+const MOBILE_CHART_HEIGHT = 680;
 
 interface Node extends Technology, d3.SimulationNodeDatum {
     id: number;
@@ -39,7 +40,7 @@ interface Node extends Technology, d3.SimulationNodeDatum {
 let svg: SVGElement | undefined = $state();
 let container: HTMLDivElement | undefined = $state();
 let width = $state(browser ? document.documentElement.clientWidth : 1024); // Default width for SSR
-let height = $derived(width < MOBILE_BREAKPOINT ? 550 : 400);
+let height = $derived(width < MOBILE_BREAKPOINT ? MOBILE_CHART_HEIGHT : 400);
 let centerX = $derived(width * 0.5);
 let centerY = $derived(height * 0.5);
 let simulation: d3.Simulation<Node, undefined>;
@@ -56,6 +57,7 @@ let isDragging = false;
 let headerAnimationDone = $state(false);
 const paddingX = 10;
 const paddingY = 50;
+const collisionRadius = (node: Node) => node.r + (width < MOBILE_BREAKPOINT ? 6 : 2);
 
 // Subscribe to the header animation state
 const unsubscribe = headerAnimationComplete.subscribe(value => {
@@ -115,7 +117,7 @@ function getClusterCenters() {
     const maxContentWidth = 800; // Maximum content width
     
     if (isMobile) {
-        // Triangle arrangement for mobile - very compact
+        // Separate the infrastructure group from the two lower groups.
         const horizontalSpacing = width * 0.1;
         
         return types.reduce((acc, type, i) => {
@@ -123,19 +125,19 @@ function getClusterCenters() {
                 case 0: // Top center
                     acc[type] = {
                         x: width / 2,
-                        y: height * 0.4 
+                        y: height * 0.29
                     };
                     break;
                 case 1: // Bottom left
                     acc[type] = {
                         x: width / 2 - horizontalSpacing,
-                        y: height * 0.57
+                        y: height * 0.67
                     };
                     break;
                 case 2: // Bottom right
                     acc[type] = {
                         x: width / 2 + horizontalSpacing,
-                        y: height * 0.57
+                        y: height * 0.67
                     };
                     break;
             }
@@ -222,7 +224,7 @@ function initializeSimulation() {
 
     simulation = d3.forceSimulation(nodes)
         .force('charge', d3.forceManyBody().strength(-80))
-        .force('collide', d3.forceCollide<Node>(d => d.r + 2).strength(0.9))
+        .force('collide', d3.forceCollide<Node>(collisionRadius).strength(0.9))
         .force('x', d3.forceX<Node>(d => clusterCenters[d.type].x).strength(0.07))
         .force('y', d3.forceY<Node>(d => clusterCenters[d.type].y).strength(0.07))
         .force('bounds', () => {
@@ -264,6 +266,8 @@ function initializeSimulation() {
         .style('opacity', '0')
         .attr('transform', d => `translate(${d.x},${d.y})`)
         .call(d3.drag<SVGGElement, Node>()
+            // Taps still open a bubble. A swipe over one should scroll the page.
+            .touchable(() => false)
             .on('start', (event, d) => {
                 isDragging = false;
                 if (!event.active) simulation.alphaTarget(0.2).restart();
@@ -299,7 +303,7 @@ function initializeSimulation() {
         changed.attr('aria-pressed', item => String(Boolean(item.isExpanded)));
         const surfaces = changed.select<SVGCircleElement>('.bubble-surface').interrupt('radius');
 
-        simulation.force('collide', d3.forceCollide<Node>(item => item.r + 2).strength(0.9));
+        simulation.force('collide', d3.forceCollide<Node>(collisionRadius).strength(0.9));
         if (reducedMotion) {
             surfaces.attr('r', item => item.r);
             simulation.alpha(0.5).stop().tick(160);
@@ -476,7 +480,8 @@ onMount(() => {
             const newClusterCenters = getClusterCenters();
             simulation
                 .force('x', d3.forceX<Node>(d => newClusterCenters[d.type].x).strength(0.08))
-                .force('y', d3.forceY<Node>(d => newClusterCenters[d.type].y).strength(0.08));
+                .force('y', d3.forceY<Node>(d => newClusterCenters[d.type].y).strength(0.08))
+                .force('collide', d3.forceCollide<Node>(collisionRadius).strength(0.9));
             if (reducedMotion && hasAnimated) startAnimation();
             else simulation.alpha(0.3).restart();
         }
@@ -543,7 +548,9 @@ let nodes = $derived(technologies.map((tech, index) => ({
 let maxRadius = $derived(Math.max(0, ...technologies.map(tech => tech.proficiency)) * BUBBLE_SIZE_SCALE * 2);
 </script>
 
-<div class="bubble-chart-container" style:--chart-width={browser ? width + 'px' : undefined}>
+<div class="bubble-chart-container"
+    style:--chart-width={browser ? width + 'px' : undefined}
+    style:--chart-mobile-height={MOBILE_CHART_HEIGHT + 'px'}>
     <div class="bubble-chart-wrapper">
         <div class="bubble-chart" bind:this={container} role="group" aria-label="Technologies — select a bubble to learn more">
             <svg 
@@ -578,7 +585,8 @@ let maxRadius = $derived(Math.max(0, ...technologies.map(tech => tech.proficienc
 
 @media (max-width: 600px) {
     .bubble-chart-container {
-        --chart-height: 550px;
+        --chart-height: var(--chart-mobile-height);
+        margin-block: 0;
     }
 }
 
@@ -592,6 +600,7 @@ let maxRadius = $derived(Math.max(0, ...technologies.map(tech => tech.proficienc
     height: 100%;
     display: flex;
     align-items: center;
+    touch-action: pan-y pinch-zoom;
 }
 
 :global(.node) {

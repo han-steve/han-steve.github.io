@@ -27,9 +27,8 @@ export const experience: ExperienceItem[] = [
 				title: 'Agent infrastructure',
 				body: [
 					'Built the Slack integration and Kubernetes infrastructure for an internal agent platform used by about 1,000 people a month. The agent gets tagged about 2,000 times a day in Slack.',
-					'I built the sandbox provider with agent-sandbox and gVisor. Keeping a pool ready brought sandbox startup below one second.',
-					'My Temporal workflows shut down idle sandboxes. When someone returns to a Slack thread, the workflow attaches their files from cloud storage to a new sandbox.',
-					'Built a Slack bot that checks stuck training jobs and answers debugging questions from their logs (6,400 invocations).'
+					'Built a Kubernetes sandbox provider with agent-sandbox and gVisor. Wrote Temporal workflows to release idle sandboxes and reconnect each Slack session to its files in cloud storage.',
+					'Training questions in Slack interrupted our team throughout the day. I built a bot to help researchers debug their training jobs. It’s handled over 6,000 messages.'
 				]
 			},
 			{
@@ -135,7 +134,7 @@ export const experience: ExperienceItem[] = [
 					alt: 'Dive’s mobile Events screen has RSVP filters and illustrated cards for a drive-in movie and a hike.',
 					width: 496,
 					height: 644,
-					caption: 'The Events tab let you switch between events you were going to and ones you were hosting.'
+					caption: 'Dive Chat gave college groups a place to chat and organize events.'
 				}
 			},
 			{
