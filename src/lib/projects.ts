@@ -154,7 +154,8 @@ export const projects: Project[] = [
 		sections: [
 			{
 				points: [
-					'Modeled a riderless scooter in MuJoCo to test whether a rental could steer itself back to a charger. With the speed fixed at 12 mph and a reward for staying upright, the scooter learned to ride in one big circle.'
+					'Compared Proximal Policy Optimization (PPO) with a deep Q-network (DQN) to teach a riderless scooter to balance in MuJoCo. Both earned one point per step upright. PPO learned to balance in fewer steps in my runs, so I used it for navigation.',
+					'Held the scooter at 12 mph and gave the policy control of the handlebars. Thirty times a second it read the scooter’s lean, how fast it was tipping, and the steering angle, then chose one of five steering adjustments.'
 				],
 				figure: {
 					image: '/assets/projects/scooter/balance.jpg',
@@ -170,7 +171,7 @@ export const projects: Project[] = [
 			},
 			{
 				points: [
-					'Trained the scooter to make a 90-degree turn before attempting a U-turn. Those two turns were enough for it to steer toward the target from starting angles it hadn’t practiced.'
+					'Added the signed angle to the target as an input and penalized heading error. Trained the scooter on a 90-degree turn, then a U-turn, before testing it from new starting directions.'
 				],
 				figure: {
 					image: '/assets/projects/scooter/trajectories.webp',

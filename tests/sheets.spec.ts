@@ -238,18 +238,21 @@ test('the scrolled toolbar blurs the article, leaves space around the close cont
 		const grip = el.getBoundingClientRect();
 		const sheet = el.closest('.project-sheet')!;
 		const bar = getComputedStyle(sheet, '::before');
-		const close = sheet.querySelector('.sheet-close')!.getBoundingClientRect();
+		const button = sheet.querySelector('.sheet-close')!;
+		const close = button.getBoundingClientRect();
+		const disc = getComputedStyle(button, '::before');
 		const top = close.top - sheet.getBoundingClientRect().top;
 		const bottom = parseFloat(bar.height) - top - close.height;
 		return {
 			blur: bar.backdropFilter,
 			isTranslucent: bar.backgroundColor.includes('0.72'),
-			top, bottom, targetSize: close.height,
+			top: top + parseFloat(disc.top), bottom: bottom + parseFloat(disc.bottom),
+			discSize: parseFloat(disc.height), targetSize: close.height,
 			belowGrip: document.elementFromPoint(grip.right + 70, grip.y)?.classList.contains('project-sheet'),
 			gripIsOnTop: document.elementFromPoint(grip.x + grip.width / 2, grip.y + 2) === el
 		};
 	});
-	expect(layers).toEqual({ blur: 'blur(16px)', isTranslucent: true, top: 12, bottom: 12, targetSize: 44, belowGrip: true, gripIsOnTop: true });
+	expect(layers).toEqual({ blur: 'blur(16px)', isTranslucent: true, top: 10, bottom: 10, discSize: 28, targetSize: 44, belowGrip: true, gripIsOnTop: true });
 	await scroll.evaluate(el => { el.scrollTop = 0; });
 	await expect(sheet).not.toHaveClass(/sheet-with-toolbar/);
 	await expect(grip).toHaveCSS('backdrop-filter', /invert\(1\)/);

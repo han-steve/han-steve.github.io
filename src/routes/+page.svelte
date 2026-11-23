@@ -13,7 +13,7 @@
 			svg: '/assets/icons/kubernets.svg',
 			proficiency: 5 as const,
 			description:
-				'2 YoE creating and operating (and very, very occasionally breaking) production clusters with 3000+ nodes',
+				'3 YoE creating and operating (and very, very occasionally breaking) production clusters with 3000+ nodes',
 			type: 'infra'
 		},
 		{
