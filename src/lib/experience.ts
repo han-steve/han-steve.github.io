@@ -35,7 +35,7 @@ export const experience: ExperienceItem[] = [
 			{
 				title: 'GPU inference clusters',
 				body: [
-					'My teammates and I built GPU inference clusters from scratch at Roblox. The clusters ran active-active across regions and served workloads including safety models. I automated cluster setup with Terraform and Kubernetes.',
+					'My teammates and I built GPU inference clusters from scratch at Roblox. The clusters ran active-active across regions and served workloads including safety models. I automated cluster setup with Terraform and Kubernetes and set up Argo CD so teams could deploy models independently through GitOps.',
 					'I designed the load balancing and automatic failover. The AWS Application Load Balancer sent requests directly to NGINX pods, removing a network hop. I fixed downtime during NGINX redeploys and spread replicas across nodes so we could upgrade a cluster while it served traffic.',
 					'Used local NVMe storage to bring new serving capacity online faster.',
 					'The new clusters ran larger safety models at lower cost. Roblox reported that one handled 370,000 requests per second at peak.'
@@ -58,7 +58,7 @@ export const experience: ExperienceItem[] = [
 				body: [
 					'Maintained Kubeflow, Istio, the LLM Batch API, and production Kubernetes clusters with more than 3,000 nodes.',
 					'Adapted KubeRay to Roblox’s schedulers and built the Go job service and dashboard. The platform handled more than 100 jobs a day.',
-					'Built the on-premises training environment for the 3D foundation model team and enabled RDMA between nodes. The team processed petabytes of data with Ray. I also enabled EFA on AWS.',
+					'I built the Ray training environment and enabled RDMA between GPU nodes. The 3D foundation model team could train in our data center at lower cost than on AWS. The team also processed petabytes of data with Ray, and I enabled EFA for training on AWS.',
 					'Built a cloud IDE by integrating Coder with Ray. The workspace ran on the Ray head node, so researchers could keep their editor open while idle GPU workers scaled to zero.',
 					'Used Seekable OCI (SOCI) to load container image data on demand and speed up workspace startup.'
 				],

@@ -33,13 +33,13 @@
 				<p>Contributed to agent infrastructure for Build, Roblox’s tool for creating games from text prompts.</p>
 				<h4>Senior Software Engineer · ML Platform</h4>
 				<span class="cv-date">August 2025 — June 2026</span>
-				<p>Built an RDMA-enabled training environment for the 3D foundation model team.</p>
+				<p>Built an RDMA-enabled Ray environment that let the 3D foundation model team train in Roblox’s data center at lower cost than on AWS.</p>
 				<p>Integrated Coder with Ray so researchers could test code changes without rebuilding a container image. Used Seekable OCI (SOCI) to speed up workspace startup.</p>
 				<h4>Software Engineer · ML Platform</h4>
 				<span class="cv-date">September 2023 — August 2025</span>
-				<p>Helped build active-active GPU inference clusters from scratch across multiple regions. Designed load balancing and automatic failover with AWS Application Load Balancers. Automated cluster setup with Terraform and Kubernetes.</p>
+				<p>Helped build active-active GPU inference clusters from scratch across multiple regions. Designed load balancing and automatic failover with AWS Application Load Balancers. Automated cluster setup with Terraform and Kubernetes and set up GitOps for model deployments with Argo CD.</p>
 				<p>Maintained Kubeflow, Istio, the LLM Batch API, and production Kubernetes clusters with more than 3,000 nodes.</p>
-				<p>Built the Ray job platform on Kubernetes. Engineers submitted more than 10,000 Ray jobs in the second quarter of 2025.</p>
+				<p>Built the Ray job platform on Kubernetes and helped grow adoption to more than 100 jobs a day.</p>
 			</div>
 			<div class="cv-entry">
 				<h3><a use:experienceSurface class="company-link" href="/experience/amazon/"><CompanyMark slug="amazon" /><span data-experience-part="title">Amazon</span></a></h3>
